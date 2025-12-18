@@ -1,13 +1,13 @@
 import { createBrowserRouter, Navigate } from 'react-router';
 // Pages
-import { About, Home, Login, Register } from './pages';
-import { AuthLayout } from './layouts';
+import { About, Login, Register } from './pages';
+import { AuthLayout, DashboardLayout } from './layouts';
 
 export default createBrowserRouter([
   {
     path: '/',
     children: [
-      { index: true, Component: Home },
+      { index: true, Component: DashboardLayout },
       { path: 'about', Component: About },
       {
         path: 'auth',
@@ -18,12 +18,6 @@ export default createBrowserRouter([
           { path: 'register', Component: Register },
         ],
       },
-      //   {
-      //     path: 'dashboard',
-      //     children: [
-      //       { path: ':city', Component: ConcertsCity },
-      //     ],
-      //   },
     ],
   },
 ]);

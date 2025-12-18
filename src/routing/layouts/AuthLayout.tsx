@@ -9,7 +9,7 @@ const AuthLayout = () => {
         <Outlet />
       </div>
 
-      <div className="hidden lg:flex justify-center items-center bg-slate-200 px-4 md:px-8 lg:px-16">
+      <div className="hidden lg:flex justify-center items-center bg-red-500 px-4 md:px-8 lg:px-16">
         <div className="max-h-96">
           <img src={websnakeLogo} alt="Websnake" className=" h-full w-full" />
         </div>
