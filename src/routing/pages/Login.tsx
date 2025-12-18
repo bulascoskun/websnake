@@ -14,34 +14,32 @@ import {
   FieldLabel,
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import { InputGroup, InputGroupTextarea } from '@/components/ui/input-group';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
 import { Link } from 'react-router';
 import * as z from 'zod';
 
 const formSchema = z.object({
-  title: z
+  username: z
     .string()
-    .min(5, 'Bug title must be at least 5 characters.')
-    .max(32, 'Bug title must be at most 32 characters.'),
-  description: z
+    .min(4, 'Username must be at least 4 characters.')
+    .max(16, 'Username must be at most 16 characters.'),
+  password: z
     .string()
-    .min(20, 'Description must be at least 20 characters.')
-    .max(100, 'Description must be at most 100 characters.'),
+    .min(4, 'Password must be at least 4 characters.')
+    .max(16, 'Password must be at most 16 characters.'),
 });
 
 const Login = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: '',
-      description: '',
+      username: '',
+      password: '',
     },
   });
 
   function onSubmit(data: z.infer<typeof formSchema>) {
-    // Do something with the form values.
     console.log(data);
   }
 
@@ -53,28 +51,28 @@ const Login = () => {
         </CardTitle>
         <CardDescription>
           <Link to="/auth/register">
-            Click here to <span className="underline">register</span>.
+            Don't have an account? Click here to{' '}
+            <span className="underline">register</span>.
           </Link>
         </CardDescription>
       </CardHeader>
 
       <CardContent>
-        <form id="form-rhf-demo" onSubmit={form.handleSubmit(onSubmit)}>
+        <form id="form-login" onSubmit={form.handleSubmit(onSubmit)}>
           <FieldGroup>
             <Controller
-              name="title"
+              name="username"
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="form-rhf-demo-title">
-                    Bug Title
+                  <FieldLabel htmlFor="form-login-username">
+                    Username
                   </FieldLabel>
                   <Input
                     {...field}
-                    id="form-rhf-demo-title"
+                    id="form-login-username"
                     aria-invalid={fieldState.invalid}
-                    placeholder="Login button not working on mobile"
-                    autoComplete="off"
+                    placeholder="Please enter your username."
                   />
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
@@ -82,24 +80,23 @@ const Login = () => {
                 </Field>
               )}
             />
+
             <Controller
-              name="description"
+              name="password"
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="form-rhf-demo-description">
-                    Description
+                  <FieldLabel htmlFor="form-login-password">
+                    Password
                   </FieldLabel>
-                  <InputGroup>
-                    <InputGroupTextarea
-                      {...field}
-                      id="form-rhf-demo-description"
-                      placeholder="I'm having an issue with the login button on mobile."
-                      rows={6}
-                      className="min-h-24 resize-none"
-                      aria-invalid={fieldState.invalid}
-                    />
-                  </InputGroup>
+
+                  <Input
+                    {...field}
+                    id="form-login-password"
+                    type="password"
+                    placeholder="Please enter your password."
+                    aria-invalid={fieldState.invalid}
+                  />
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
                   )}
@@ -115,7 +112,7 @@ const Login = () => {
           <Button type="button" variant="outline" onClick={() => form.reset()}>
             Reset
           </Button>
-          <Button type="submit" form="form-rhf-demo">
+          <Button type="submit" form="form-login">
             Submit
           </Button>
         </Field>

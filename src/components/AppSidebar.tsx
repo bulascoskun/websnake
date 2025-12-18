@@ -20,6 +20,7 @@ import {
 
 import websnakeLogo from '@/assets/websnake.png';
 import { Button } from './ui/button';
+import { useNavigate } from 'react-router';
 
 // Menu items.
 const items = [
@@ -51,6 +52,12 @@ const items = [
 ];
 
 export function AppSidebar() {
+  let navigate = useNavigate();
+
+  const handleLogout = () => {
+    navigate('/auth/login');
+  };
+
   return (
     <Sidebar>
       <SidebarHeader>
@@ -88,8 +95,13 @@ export function AppSidebar() {
           <div>websnake_admin</div>
 
           <Tooltip>
-            <TooltipTrigger>
-              <Button variant="outline" size="icon" aria-label="Submit">
+            <TooltipTrigger asChild>
+              <Button
+                onClick={handleLogout}
+                variant="outline"
+                size="icon"
+                aria-label="Logout"
+              >
                 <LogOut />
               </Button>
             </TooltipTrigger>
