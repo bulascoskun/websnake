@@ -9,20 +9,15 @@ import {
 } from '@/components/ui/card';
 import {
   Field,
-  FieldDescription,
   FieldError,
   FieldGroup,
   FieldLabel,
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupText,
-  InputGroupTextarea,
-} from '@/components/ui/input-group';
+import { InputGroup, InputGroupTextarea } from '@/components/ui/input-group';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
+import { Link } from 'react-router';
 import * as z from 'zod';
 
 const formSchema = z.object({
@@ -53,9 +48,13 @@ const Login = () => {
   return (
     <Card className="w-full sm:max-w-md">
       <CardHeader>
-        <CardTitle>Login</CardTitle>
+        <CardTitle>
+          <span className="text-xl font-bold">Login</span>
+        </CardTitle>
         <CardDescription>
-          Help us improve by reporting bugs you encounter.
+          <Link to="/auth/register">
+            Click here to <span className="underline">register</span>.
+          </Link>
         </CardDescription>
       </CardHeader>
 
@@ -100,16 +99,7 @@ const Login = () => {
                       className="min-h-24 resize-none"
                       aria-invalid={fieldState.invalid}
                     />
-                    <InputGroupAddon align="block-end">
-                      <InputGroupText className="tabular-nums">
-                        {field.value.length}/100 characters
-                      </InputGroupText>
-                    </InputGroupAddon>
                   </InputGroup>
-                  <FieldDescription>
-                    Include steps to reproduce, expected behavior, and what
-                    actually happened.
-                  </FieldDescription>
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
                   )}
@@ -119,6 +109,7 @@ const Login = () => {
           </FieldGroup>
         </form>
       </CardContent>
+
       <CardFooter>
         <Field orientation="horizontal">
           <Button type="button" variant="outline" onClick={() => form.reset()}>
