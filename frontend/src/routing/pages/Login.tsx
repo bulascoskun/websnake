@@ -17,11 +17,11 @@ import { Input } from '@/components/ui/input';
 import api from '@/api/axios';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { toast } from 'sonner';
 import { Toaster } from '@/components/ui/sonner';
-import * as z from 'zod';
 import { useAuthStore } from '@/store/useAuthStore';
+import * as z from 'zod';
 
 const formSchema = z.object({
   email: z
@@ -35,6 +35,8 @@ const formSchema = z.object({
 });
 
 const Login = () => {
+  const navigate = useNavigate();
+
   const login = useAuthStore((state) => state.login);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -50,6 +52,7 @@ const Login = () => {
       const { data } = await api.post('/auth/login', payload);
       login(data);
       toast.success('Login successful. You are being redirected.');
+      navigate('/');
     } catch (error) {
       console.error(error);
     }

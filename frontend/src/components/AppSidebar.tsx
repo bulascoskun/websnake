@@ -52,7 +52,7 @@ const items = [
 ];
 
 export function AppSidebar() {
-  let navigate = useNavigate();
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     navigate('/auth/login');

@@ -1,3 +1,4 @@
+import api from '@/api/axios';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -16,47 +17,67 @@ import {
 import { Input } from '@/components/ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
+import { toast } from 'sonner';
 import * as z from 'zod';
 
-const formSchema = z.object({
-  email: z
-    .email('This is not a valid email.')
-    .min(4, 'E-mail must be at least 4 characters.')
-    .max(256, 'E-mail must be at most 256 characters.'),
-  name: z
-    .string()
-    .min(4, 'Name must be at least 4 characters.')
-    .max(32, 'Name must be at most 32 characters.'),
-  lastName: z
-    .string()
-    .min(4, 'Last name must be at least 4 characters.')
-    .max(32, 'Last name must be at most 32 characters.'),
-  password: z
-    .string()
-    .min(4, 'Password must be at least 4 characters.')
-    .max(32, 'Password must be at most 32 characters.'),
-  rePassword: z
-    .string()
-    .min(4, 'Password must be at least 4 characters.')
-    .max(32, 'Password must be at most 32 characters.'),
-});
+const formSchema = z
+  .object({
+    email: z
+      .email('This is not a valid email.')
+      .min(4, 'E-mail must be at least 4 characters.')
+      .max(256, 'E-mail must be at most 256 characters.'),
+    first_name: z
+      .string()
+      .min(4, 'First name must be at least 4 characters.')
+      .max(32, 'First name must be at most 32 characters.'),
+    last_name: z
+      .string()
+      .min(4, 'Last name must be at least 4 characters.')
+      .max(32, 'Last name must be at most 32 characters.'),
+    password: z
+      .string()
+      .min(4, 'Password must be at least 4 characters.')
+      .max(32, 'Password must be at most 32 characters.'),
+    rePassword: z
+      .string()
+      .min(4, 'Password must be at least 4 characters.')
+      .max(32, 'Password must be at most 32 characters.'),
+  })
+  .refine((data) => data.password === data.rePassword, {
+    message: "Passwords don't match",
+    path: ['rePassword'],
+  });
 
-const Login = () => {
+const Register = () => {
+  const navigate = useNavigate();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: '',
-      name: '',
-      lastName: '',
+      first_name: '',
+      last_name: '',
       password: '',
       rePassword: '',
     },
   });
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
-    console.log(data);
-  }
+  const onSubmit = async (payload: z.infer<typeof formSchema>) => {
+    // {
+    //   "first_name": "string",
+    //   "last_name": "string",
+    //   "email": "user@example.com",
+    //   "password": "string"
+    // }
+    try {
+      await api.post('/auth/register', payload);
+      toast.success('You have successfully created an account. Please log in.');
+      navigate('/auth/login');
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <Card className="w-full sm:max-w-md">
@@ -95,16 +116,18 @@ const Login = () => {
             />
 
             <Controller
-              name="name"
+              name="first_name"
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="form-login-name">Name</FieldLabel>
+                  <FieldLabel htmlFor="form-login-first_name">
+                    First Name
+                  </FieldLabel>
                   <Input
                     {...field}
-                    id="form-login-name"
+                    id="form-login-first_name"
                     aria-invalid={fieldState.invalid}
-                    placeholder="Please enter your name."
+                    placeholder="Please enter your first name."
                   />
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
@@ -114,16 +137,16 @@ const Login = () => {
             />
 
             <Controller
-              name="lastName"
+              name="last_name"
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="form-login-lastname">
+                  <FieldLabel htmlFor="form-login-last_name">
                     Last Name
                   </FieldLabel>
                   <Input
                     {...field}
-                    id="form-login-lastname"
+                    id="form-login-last_name"
                     aria-invalid={fieldState.invalid}
                     placeholder="Please enter your last name."
                   />
@@ -196,4 +219,4 @@ const Login = () => {
     </Card>
   );
 };
-export default Login;
+export default Register;
