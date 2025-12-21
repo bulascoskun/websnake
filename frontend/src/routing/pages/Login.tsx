@@ -14,7 +14,7 @@ import {
   FieldLabel,
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import api from '@/services/axios';
+import api from '@/api/axios';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -25,11 +25,11 @@ const formSchema = z.object({
   username: z
     .string()
     .min(4, 'Username must be at least 4 characters.')
-    .max(16, 'Username must be at most 16 characters.'),
+    .max(16, 'Username must be at most 32 characters.'),
   password: z
     .string()
     .min(4, 'Password must be at least 4 characters.')
-    .max(16, 'Password must be at most 16 characters.'),
+    .max(16, 'Password must be at most 32 characters.'),
 });
 
 const Login = () => {
