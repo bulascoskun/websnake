@@ -21,6 +21,7 @@ import { Link } from 'react-router';
 import { toast } from 'sonner';
 import { Toaster } from '@/components/ui/sonner';
 import * as z from 'zod';
+import { useAuthStore } from '@/store/useAuthStore';
 
 const formSchema = z.object({
   email: z
@@ -34,6 +35,8 @@ const formSchema = z.object({
 });
 
 const Login = () => {
+  const login = useAuthStore((state) => state.login);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -45,13 +48,10 @@ const Login = () => {
   const onSubmit = async (payload: z.infer<typeof formSchema>) => {
     try {
       const { data } = await api.post('/auth/login', payload);
-      const token = data?.token;
-      console.log(token);
-      // toast.success('success');
+      login(data);
+      toast.success('Login successful. You are being redirected.');
     } catch (error) {
-      // TODO: Error handling
       console.error(error);
-      // toast.error('warning');
     }
   };
 

@@ -32,7 +32,13 @@ class UserService:
         ):
             token = AuthHandler.sign_jwt(user_id=user.id)
             if token:
-                return UserWithToken(token=token)
+                return UserWithToken(
+                    first_name=user.first_name,
+                    last_name=user.last_name,
+                    email=user.email,
+                    token=token,
+                )
+
             raise HTTPException(status_code=500, detail="Unable to process request")
         raise HTTPException(status_code=400, detail="Please check your credentials")
 
