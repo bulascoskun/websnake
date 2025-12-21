@@ -1,7 +1,7 @@
 import { Separator } from '@/components/ui/separator';
 import websnakeLogo from '@/assets/websnake.svg';
 import CustomSidebarFooter from './CustomSidebarFooter';
-import { Calendar, Home, Inbox, Search, Settings } from 'lucide-react';
+import { Home, Settings } from 'lucide-react';
 import {
   Sidebar,
   SidebarContent,
