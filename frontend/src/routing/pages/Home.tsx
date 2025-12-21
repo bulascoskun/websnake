@@ -1,4 +1,58 @@
+import HomeDomainTable from '@/components/HomeDomainTable';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+
 const Home = () => {
-  return <div className="container mx-auto bg-red-500">Home</div>;
+  return (
+    <>
+      <Card>
+        <CardHeader>
+          <CardTitle>Web Intelligence Dashboard</CardTitle>
+          <CardDescription>
+            Crawled domains and AI-extracted insights
+          </CardDescription>
+        </CardHeader>
+
+        <CardContent>
+          <p>TODO:</p>
+        </CardContent>
+      </Card>
+
+      <div className="mt-4 lg:mt-6 grid grid-cols-12 gap-4 lg:gap-6">
+        <Card className="col-span-4">
+          <CardHeader>
+            <CardTitle>Total Domains</CardTitle>
+            <CardDescription> 12 </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card className="col-span-4">
+          <CardHeader>
+            <CardTitle>Last crawl</CardTitle>
+            <CardDescription> 2h ago </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card className="col-span-4">
+          <CardHeader>
+            <CardTitle>Avg confidence</CardTitle>
+            <CardDescription> 0.78 </CardDescription>
+          </CardHeader>
+        </Card>
+      </div>
+
+      <Card className="mt-4 lg:mt-6">
+        <CardHeader>
+          <CardTitle>Recent Domains</CardTitle>
+          <HomeDomainTable />
+        </CardHeader>
+      </Card>
+    </>
+  );
 };
 export default Home;
