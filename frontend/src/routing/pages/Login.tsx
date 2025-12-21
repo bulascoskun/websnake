@@ -14,7 +14,9 @@ import {
   FieldLabel,
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import api from '@/services/axios';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { Link } from 'react-router';
 import * as z from 'zod';
@@ -42,6 +44,10 @@ const Login = () => {
   function onSubmit(data: z.infer<typeof formSchema>) {
     console.log(data);
   }
+
+  useEffect(() => {
+    api.get('/status');
+  }, []);
 
   return (
     <Card className="w-full sm:max-w-md">

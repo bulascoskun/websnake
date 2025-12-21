@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Depends
 from fastapi.openapi.utils import get_openapi
+from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from app.util.init_db import create_tables
 from app.routers.auth import authRouter
@@ -39,8 +40,19 @@ app.openapi = custom_openapi
 
 app.include_router(router=authRouter, tags=["auth"], prefix="/auth")
 
+app = FastAPI()
 
-@app.get("/health")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+@app.get("/status")
 def health_check():
     return {"status": "Running..."}
 
