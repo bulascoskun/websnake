@@ -21,21 +21,25 @@ import * as z from 'zod';
 
 const formSchema = z.object({
   email: z
-    .string()
+    .email('This is not a valid email.')
     .min(4, 'E-mail must be at least 4 characters.')
-    .max(16, 'E-mail must be at most 16 characters.'),
-  username: z
+    .max(256, 'E-mail must be at most 256 characters.'),
+  name: z
     .string()
-    .min(4, 'Username must be at least 4 characters.')
-    .max(16, 'Username must be at most 16 characters.'),
+    .min(4, 'Name must be at least 4 characters.')
+    .max(32, 'Name must be at most 32 characters.'),
+  lastName: z
+    .string()
+    .min(4, 'Last name must be at least 4 characters.')
+    .max(32, 'Last name must be at most 32 characters.'),
   password: z
     .string()
     .min(4, 'Password must be at least 4 characters.')
-    .max(16, 'Password must be at most 16 characters.'),
+    .max(32, 'Password must be at most 32 characters.'),
   rePassword: z
     .string()
     .min(4, 'Password must be at least 4 characters.')
-    .max(16, 'Password must be at most 16 characters.'),
+    .max(32, 'Password must be at most 32 characters.'),
 });
 
 const Login = () => {
@@ -43,7 +47,8 @@ const Login = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: '',
-      username: '',
+      name: '',
+      lastName: '',
       password: '',
       rePassword: '',
     },
@@ -90,18 +95,37 @@ const Login = () => {
             />
 
             <Controller
-              name="username"
+              name="name"
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="form-login-username">
-                    Username
+                  <FieldLabel htmlFor="form-login-name">Name</FieldLabel>
+                  <Input
+                    {...field}
+                    id="form-login-name"
+                    aria-invalid={fieldState.invalid}
+                    placeholder="Please enter your name."
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
+
+            <Controller
+              name="lastName"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor="form-login-lastname">
+                    Last Name
                   </FieldLabel>
                   <Input
                     {...field}
-                    id="form-login-username"
+                    id="form-login-lastname"
                     aria-invalid={fieldState.invalid}
-                    placeholder="Please enter your username."
+                    placeholder="Please enter your last name."
                   />
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />

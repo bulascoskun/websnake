@@ -16,38 +16,40 @@ import {
 import { Input } from '@/components/ui/input';
 import api from '@/api/axios';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { Link } from 'react-router';
 import * as z from 'zod';
 
 const formSchema = z.object({
-  username: z
-    .string()
-    .min(4, 'Username must be at least 4 characters.')
-    .max(16, 'Username must be at most 32 characters.'),
+  email: z
+    .email('This is not a valid email.')
+    .min(4, 'E-mail must be at least 4 characters.')
+    .max(256, 'E-mail must be at most 256 characters.'),
   password: z
     .string()
     .min(4, 'Password must be at least 4 characters.')
-    .max(16, 'Password must be at most 32 characters.'),
+    .max(32, 'Password must be at most 32 characters.'),
 });
 
 const Login = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: '',
+      email: '',
       password: '',
     },
   });
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
-    console.log(data);
-  }
-
-  useEffect(() => {
-    api.get('/status');
-  }, []);
+  const onSubmit = async (payload: z.infer<typeof formSchema>) => {
+    try {
+      const { data } = await api.post('/auth/login', payload);
+      const token = data?.token;
+      console.log(token);
+    } catch (error) {
+      // TODO: Error handling
+      console.error(error);
+    }
+  };
 
   return (
     <Card className="w-full sm:max-w-md">
@@ -67,18 +69,16 @@ const Login = () => {
         <form id="form-login" onSubmit={form.handleSubmit(onSubmit)}>
           <FieldGroup>
             <Controller
-              name="username"
+              name="email"
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="form-login-username">
-                    Username
-                  </FieldLabel>
+                  <FieldLabel htmlFor="form-login-email">E-mail</FieldLabel>
                   <Input
                     {...field}
-                    id="form-login-username"
+                    id="form-login-email"
                     aria-invalid={fieldState.invalid}
-                    placeholder="Please enter your username."
+                    placeholder="Please enter your E-mail."
                   />
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />

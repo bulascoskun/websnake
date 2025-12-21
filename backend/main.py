@@ -40,8 +40,6 @@ app.openapi = custom_openapi
 
 app.include_router(router=authRouter, tags=["auth"], prefix="/auth")
 
-app = FastAPI()
-
 
 app.add_middleware(
     CORSMiddleware,
