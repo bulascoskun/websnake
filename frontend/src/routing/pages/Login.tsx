@@ -18,6 +18,8 @@ import api from '@/api/axios';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
 import { Link } from 'react-router';
+import { toast } from 'sonner';
+import { Toaster } from '@/components/ui/sonner';
 import * as z from 'zod';
 
 const formSchema = z.object({
@@ -45,85 +47,94 @@ const Login = () => {
       const { data } = await api.post('/auth/login', payload);
       const token = data?.token;
       console.log(token);
+      // toast.success('success');
     } catch (error) {
       // TODO: Error handling
       console.error(error);
+      // toast.error('warning');
     }
   };
 
   return (
-    <Card className="w-full sm:max-w-md">
-      <CardHeader>
-        <CardTitle>
-          <span className="text-xl font-bold">Login</span>
-        </CardTitle>
-        <CardDescription>
-          <Link to="/auth/register">
-            Don't have an account? Click here to{' '}
-            <span className="underline">register</span>.
-          </Link>
-        </CardDescription>
-      </CardHeader>
+    <>
+      <Toaster />
+      <Card className="w-full sm:max-w-md">
+        <CardHeader>
+          <CardTitle>
+            <span className="text-xl font-bold">Login</span>
+          </CardTitle>
+          <CardDescription>
+            <Link to="/auth/register">
+              Don't have an account? Click here to{' '}
+              <span className="underline">register</span>.
+            </Link>
+          </CardDescription>
+        </CardHeader>
 
-      <CardContent>
-        <form id="form-login" onSubmit={form.handleSubmit(onSubmit)}>
-          <FieldGroup>
-            <Controller
-              name="email"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="form-login-email">E-mail</FieldLabel>
-                  <Input
-                    {...field}
-                    id="form-login-email"
-                    aria-invalid={fieldState.invalid}
-                    placeholder="Please enter your E-mail."
-                  />
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </Field>
-              )}
-            />
+        <CardContent>
+          <form id="form-login" onSubmit={form.handleSubmit(onSubmit)}>
+            <FieldGroup>
+              <Controller
+                name="email"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="form-login-email">E-mail</FieldLabel>
+                    <Input
+                      {...field}
+                      id="form-login-email"
+                      aria-invalid={fieldState.invalid}
+                      placeholder="Please enter your E-mail."
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
 
-            <Controller
-              name="password"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="form-login-password">
-                    Password
-                  </FieldLabel>
+              <Controller
+                name="password"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="form-login-password">
+                      Password
+                    </FieldLabel>
 
-                  <Input
-                    {...field}
-                    id="form-login-password"
-                    type="password"
-                    placeholder="Please enter your password."
-                    aria-invalid={fieldState.invalid}
-                  />
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </Field>
-              )}
-            />
-          </FieldGroup>
-        </form>
-      </CardContent>
+                    <Input
+                      {...field}
+                      id="form-login-password"
+                      type="password"
+                      placeholder="Please enter your password."
+                      aria-invalid={fieldState.invalid}
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+            </FieldGroup>
+          </form>
+        </CardContent>
 
-      <CardFooter>
-        <Field orientation="horizontal">
-          <Button type="button" variant="outline" onClick={() => form.reset()}>
-            Reset
-          </Button>
-          <Button type="submit" form="form-login">
-            Submit
-          </Button>
-        </Field>
-      </CardFooter>
-    </Card>
+        <CardFooter>
+          <Field orientation="horizontal">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => form.reset()}
+            >
+              Reset
+            </Button>
+            <Button type="submit" form="form-login">
+              Submit
+            </Button>
+          </Field>
+        </CardFooter>
+      </Card>
+    </>
   );
 };
 export default Login;
