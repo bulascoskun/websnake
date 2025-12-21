@@ -16,11 +16,11 @@ class UserRepository(BaseRepository):
         user = self.session.query(User).filter_by(email=email).first()
         return bool(user)
     
-    def get_user_by_email(self, email: str) -> bool:
+    def get_user_by_email(self, email: str) -> User:
         user = self.session.query(User).filter_by(email=email).first()
         return user
     
-    def get_user_by_id(self, user_id: int) -> bool:
+    def get_user_by_id(self, user_id: int) -> User:
         user = self.session.query(User).filter_by(id=user_id).first()
         return user
     

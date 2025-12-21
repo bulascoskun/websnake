@@ -5,6 +5,7 @@ class UserInCreate(BaseModel):
     first_name: str
     last_name: str
     email: EmailStr
+    password: str
 
 class UserOutput(BaseModel):
     id: int
