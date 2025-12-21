@@ -1,7 +1,7 @@
 import { Outlet } from 'react-router';
 import { Toaster } from '@/components/ui/sonner';
 
-import websnakeLogo from '@/assets/websnake.png';
+import websnakeLogo from '@/assets/websnake.svg';
 
 const AuthLayout = () => {
   return (
