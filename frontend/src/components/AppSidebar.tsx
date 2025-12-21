@@ -22,21 +22,6 @@ const items = [
     icon: Home,
   },
   {
-    title: 'Inbox',
-    url: '#',
-    icon: Inbox,
-  },
-  {
-    title: 'Calendar',
-    url: '#',
-    icon: Calendar,
-  },
-  {
-    title: 'Search',
-    url: '#',
-    icon: Search,
-  },
-  {
     title: 'Settings',
     url: '#',
     icon: Settings,
@@ -47,9 +32,9 @@ export function AppSidebar() {
   return (
     <Sidebar>
       <SidebarHeader>
-        <Link to="/" className="flex items-center gap-4">
+        <Link to="/" className="flex items-center justify-center gap-4">
           <img src={websnakeLogo} alt="Websnake" className="h-6" />
-          <div className="font-semibold">Dashboard</div>
+          {/* <div className="font-semibold">Dashboard</div> */}
         </Link>
       </SidebarHeader>
 
