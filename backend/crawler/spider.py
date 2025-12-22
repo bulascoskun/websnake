@@ -1,7 +1,7 @@
 from urllib.request import urlopen
-from link_finder import LinkFinder
-from domain import get_domain_name
-from general import create_project_dir, create_data_files, file_to_set, set_to_file
+from .link_finder import LinkFinder
+from .domain import get_domain_name
+from .general import create_project_dir, create_data_files, file_to_set, set_to_file
 
 
 class Spider:

@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, BackgroundTasks
 from fastapi.openapi.utils import get_openapi
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
@@ -6,6 +6,7 @@ from app.util.init_db import create_tables
 from app.routers.auth import authRouter
 from app.util.protectRoute import get_current_user
 from app.db.schema.user import UserOutput
+from crawler.main import run_crawler
 
 
 @asynccontextmanager
@@ -58,3 +59,10 @@ def health_check():
 @app.get("/protected")
 def read_protected(user: UserOutput = Depends(get_current_user)):
     return {"data": user}
+
+
+@app.post("/crawl")
+def start_crawler(background_tasks: BackgroundTasks, url: str, limit: int = 10):
+    background_tasks.add_task(run_crawler, homepage=url, max_links=limit)
+
+    return {"message": "Crawler started", "url": url, "limit": limit}
