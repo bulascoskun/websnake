@@ -29,11 +29,11 @@ const formSchema = z
       .max(256, 'E-mail must be at most 256 characters.'),
     first_name: z
       .string()
-      .min(4, 'First name must be at least 4 characters.')
+      .min(2, 'First name must be at least 2 characters.')
       .max(32, 'First name must be at most 32 characters.'),
     last_name: z
       .string()
-      .min(4, 'Last name must be at least 4 characters.')
+      .min(2, 'Last name must be at least 2 characters.')
       .max(32, 'Last name must be at most 32 characters.'),
     password: z
       .string()
