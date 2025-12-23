@@ -29,13 +29,17 @@ def fail_job(db: Session, job_id: int):
 
 
 def save_scraped_pages(db: Session, job_id: int, pages: list[dict]):
+    print("Saving to db...")
     for page in pages:
         db.add(
             ScrapedPage(
                 job_id=job_id,
                 url=page.get("url"),
                 title=page.get("title"),
-                content=page.get("content"),
+                description=page.get("description"),
+                body_preview=page.get("body_preview"),
+                h1=page.get("h1"),
             )
         )
     db.commit()
+    print("Saving complete")

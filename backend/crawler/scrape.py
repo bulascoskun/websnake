@@ -26,9 +26,6 @@ def scrape_pages(urls):
             body_text = " ".join(p.get_text(strip=True) for p in paragraphs)
             body_preview = body_text[:300]
 
-            time_tag = soup.find("time")
-            published_at = time_tag.get("datetime") if time_tag else ""
-
             results.append(
                 {
                     "url": url,
@@ -36,7 +33,6 @@ def scrape_pages(urls):
                     "description": description,
                     "h1": h1_text,
                     "body_preview": body_preview,
-                    "published_at": published_at,
                 }
             )
 

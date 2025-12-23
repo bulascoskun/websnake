@@ -11,5 +11,7 @@ class ScrapedPage(Base):
     url: Mapped[str] = mapped_column(
         String,
     )
-    title: Mapped[str] = mapped_column(String, nullable=False)
-    content: Mapped[str] = mapped_column(Text, nullable=False)
+    title: Mapped[str] = mapped_column(String, nullable=True)
+    description: Mapped[str] = mapped_column(Text, nullable=True)
+    body_preview: Mapped[str] = mapped_column(Text, nullable=True)
+    h1: Mapped[str] = mapped_column(Text, nullable=True)

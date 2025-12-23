@@ -3,12 +3,8 @@ from crawler.main import run_crawler
 from app.db.repository.crawlRepo import create_job
 from sqlalchemy.orm import Session
 from app.core.database import get_db
+from app.db.models.scraped_page import ScrapedPage
 
-
-# from app.db.schema.user import UserInCreate, UserInLogin, UserWithToken, UserOutput
-# from app.core.database import get_db
-# from sqlalchemy.orm import Session
-# from app.service.userService import UserService
 
 crawlerRouter = APIRouter()
 
@@ -28,3 +24,21 @@ def start_crawler(
     )
 
     return {"job_id": job.id, "status": job.status}
+
+
+@crawlerRouter.get("/scraped")
+def get_scraped_pages(db: Session = Depends(get_db)):
+    pages = db.query(ScrapedPage).limit(200).all()
+
+    return [
+        {
+            "id": p.id,
+            "job_id": p.job_id,
+            "url": p.url,
+            "title": p.title,
+            "description": p.description,
+            "body_preview": p.body_preview,
+            "h1": p.h1,
+        }
+        for p in pages
+    ]
