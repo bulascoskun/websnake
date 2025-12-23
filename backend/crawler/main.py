@@ -70,7 +70,13 @@ def run_crawler(
         # save to db
         CrawlService(session=db).save_scraped_pages(job_id, scraped_data)
 
-        # dosyayı sil
+        # remove files
+        if os.path.exists(SCRAPED_FILE):
+            os.remove(SCRAPED_FILE)
+
+        if os.path.exists(SCRAPED_FILE):
+            os.remove(SCRAPED_FILE)
+
         if os.path.exists(SCRAPED_FILE):
             os.remove(SCRAPED_FILE)
 

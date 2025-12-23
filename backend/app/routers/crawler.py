@@ -8,24 +8,28 @@ from app.service.crawlService import CrawlService
 crawlerRouter = APIRouter()
 
 
-@crawlerRouter.post("/crawl")
+@crawlerRouter.post("/crawl", status_code=202)
 def start_crawler(
     url: str,
     background_tasks: BackgroundTasks,
     session: Session = Depends(get_db),
 ):
-    job = CrawlService(session=session).create_job(url=url)
+    try:
+        job = CrawlService(session=session).create_job(url=url)
 
-    background_tasks.add_task(
-        run_crawler,
-        homepage=url,
-        job_id=job.id,
-    )
+        background_tasks.add_task(
+            run_crawler,
+            homepage=url,
+            job_id=job.id,
+        )
 
-    return {"job_id": job.id, "status": job.status}
+        return {"job_id": job.id, "status": job.status}
+    except Exception as error:
+        print(error)
+        raise error
 
 
-@crawlerRouter.get("/get_scraped_pages")
+@crawlerRouter.get("/get_scraped_pages", status_code=200)
 def register(session: Session = Depends(get_db)):
     try:
         return CrawlService(session=session).get_scraped_pages()
