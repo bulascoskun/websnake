@@ -2,6 +2,7 @@ from .base import BaseRepository
 from app.db.models.crawl_job import CrawlJob
 from app.db.models.scraped_page import ScrapedPage
 from datetime import datetime, UTC
+from app.db.models.users_jobs import UsersJobs
 
 
 class CrawlRepository(BaseRepository):
@@ -56,3 +57,22 @@ class CrawlRepository(BaseRepository):
             }
             for p in pages
         ]
+
+    def get_job_by_domain_name(self, domain_name: str):
+        return self.session.query(CrawlJob).filter(CrawlJob.url == domain_name).first()
+
+    def create_user_job_relation(self, user_id: int, job_id: int):
+        new_user_job = UsersJobs(user_id=user_id, job_id=job_id)
+
+        self.session.add(instance=new_user_job)
+        self.session.commit()
+        self.session.refresh(instance=new_user_job)
+        return new_user_job
+
+    def check_user_has_job(self, user_id: int, job_id: int):
+        existing = (
+            self.session.query(UsersJobs)
+            .filter(UsersJobs.user_id == user_id, UsersJobs.job_id == job_id)
+            .first()
+        )
+        return existing
