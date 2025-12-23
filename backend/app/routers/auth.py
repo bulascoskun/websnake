@@ -23,6 +23,3 @@ def register(registerDetails: UserInCreate, session: Session = Depends(get_db)):
     except Exception as error:
         print(error)
         raise error
-
-
-# router -> service -> repo -> db -> repo -> service -> router

@@ -2,8 +2,7 @@ from fastapi import BackgroundTasks, APIRouter, Depends
 from crawler.main import run_crawler
 from sqlalchemy.orm import Session
 from app.core.database import get_db
-from app.db.models.scraped_page import ScrapedPage
-from app.db.repository.crawlRepo import create_job
+from app.service.crawlService import CrawlService
 
 
 crawlerRouter = APIRouter()
@@ -13,9 +12,9 @@ crawlerRouter = APIRouter()
 def start_crawler(
     url: str,
     background_tasks: BackgroundTasks,
-    db: Session = Depends(get_db),
+    session: Session = Depends(get_db),
 ):
-    job = create_job(db, url)
+    job = CrawlService(session=session).create_job(url=url)
 
     background_tasks.add_task(
         run_crawler,
@@ -26,19 +25,10 @@ def start_crawler(
     return {"job_id": job.id, "status": job.status}
 
 
-@crawlerRouter.get("/scraped")
-def get_scraped_pages(db: Session = Depends(get_db)):
-    pages = db.query(ScrapedPage).limit(200).all()
-
-    return [
-        {
-            "id": p.id,
-            "job_id": p.job_id,
-            "url": p.url,
-            "title": p.title,
-            "description": p.description,
-            "body_preview": p.body_preview,
-            "h1": p.h1,
-        }
-        for p in pages
-    ]
+@crawlerRouter.get("/get_scraped_pages")
+def register(session: Session = Depends(get_db)):
+    try:
+        return CrawlService(session=session).get_scraped_pages()
+    except Exception as error:
+        print(error)
+        raise error

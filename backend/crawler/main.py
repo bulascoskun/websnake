@@ -6,13 +6,9 @@ from crawler.general import file_to_set
 from crawler.scrape import scrape_pages
 import json
 import uuid
-from app.db.repository.crawlRepo import (
-    save_scraped_pages,
-    complete_job,
-    fail_job,
-)
 from app.core.database import SessionLocal
 import os
+from app.service.crawlService import CrawlService
 
 
 def run_crawler(
@@ -72,16 +68,16 @@ def run_crawler(
             json.dump(scraped_data, f, ensure_ascii=False, indent=2)
 
         # save to db
-        save_scraped_pages(db, job_id, scraped_data)
+        CrawlService(session=db).save_scraped_pages(job_id, scraped_data)
 
         # dosyayı sil
         if os.path.exists(SCRAPED_FILE):
             os.remove(SCRAPED_FILE)
 
-        complete_job(db, job_id)
+        CrawlService(session=db).complete_job(job_id)
 
     except Exception as e:
-        fail_job(db, job_id)
+        CrawlService(session=db).fail_job(job_id)
         print("Crawler error:", e)
 
     finally:
