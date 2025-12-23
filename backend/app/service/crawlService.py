@@ -43,8 +43,10 @@ class CrawlService:
             self.__crawlRepository.create_user_job_relation(user.id, job_exists.id)
             return {"message": "Success - 2"}
 
-    def get_list(self, user_id, page, per_page):
-        pages = self.__crawlRepository.get_list(user_id, page, per_page)
+    def get_list(self, input_job_id, user_id, page, per_page):
+        pages = self.__crawlRepository.get_list(
+            input_job_id=input_job_id, user_id=user_id, page=page, per_page=per_page
+        )
         if not pages:
             raise HTTPException(status_code=400, detail="Pages not found")
         return pages

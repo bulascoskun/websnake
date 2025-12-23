@@ -25,6 +25,7 @@ def start_crawler(
 
 @crawlerRouter.get("/get_list", status_code=200)
 def get_list(
+    input_job_id: int,
     page: int,
     per_page: int,
     session: Session = Depends(get_db),
@@ -32,7 +33,10 @@ def get_list(
 ):
     try:
         return CrawlService(session=session).get_list(
-            user_id=user.id, page=int(page), per_page=int(per_page)
+            input_job_id=int(input_job_id),
+            user_id=user.id,
+            page=int(page),
+            per_page=int(per_page),
         )
     except Exception as error:
         print(error)

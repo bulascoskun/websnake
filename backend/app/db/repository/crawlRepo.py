@@ -4,6 +4,7 @@ from app.db.models.scraped_page import ScrapedPage
 from datetime import datetime, UTC
 from app.db.models.users_jobs import UsersJobs
 from typing import Optional
+from fastapi import HTTPException
 
 
 class CrawlRepository(BaseRepository):
@@ -63,7 +64,13 @@ class CrawlRepository(BaseRepository):
         else:
             return query.all()
 
-    def get_list(self, user_id: int, page: int = 1, per_page: int = 20):
+    def get_list(
+        self,
+        input_job_id: int,
+        user_id: int,
+        page: int = 1,
+        per_page: int = 20,
+    ):
         user_jobs = self.check_user_jobs(user_id=user_id)
 
         if not user_jobs:
@@ -76,23 +83,25 @@ class CrawlRepository(BaseRepository):
                     "total_pages": 0,
                     "has_next": False,
                     "has_previous": False,
+                    "next_page": None,
+                    "previous_page": None,
                 },
             }
 
         job_ids_arr = [uj.job_id for uj in user_jobs]
 
+        if input_job_id not in job_ids_arr:
+            raise HTTPException(
+                status_code=401, detail=f"Job {input_job_id} not found or access denied"
+            )
+
         query = self.session.query(ScrapedPage).filter(
-            ScrapedPage.job_id.in_(job_ids_arr)
+            ScrapedPage.job_id == input_job_id
         )
 
         total_count = query.count()
 
-        scraped_pages = (
-            query.order_by(ScrapedPage.job_id, ScrapedPage.id)
-            .offset((page - 1) * per_page)
-            .limit(per_page)
-            .all()
-        )
+        scraped_pages = query.offset((page - 1) * per_page).limit(per_page).all()
 
         results = [
             {
