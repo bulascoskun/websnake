@@ -1,5 +1,7 @@
 from app.core.database import Base, engine
-from app.db.models import user
+
+# Models
+from app.db.models import user, scraped_page, crawl_job
 
 
 def create_tables():
