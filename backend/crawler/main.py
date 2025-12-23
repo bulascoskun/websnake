@@ -5,13 +5,12 @@ from .domain import get_domain_name
 from .general import file_to_set
 from .scrape import scrape_pages
 import json
-# import uuid
+import uuid
 
 
 def run_crawler(homepage: str, max_links: int = 10, threads: int = 8):
     domain_name = get_domain_name(homepage)
-    # project_name = f"crawldata/{str(uuid.uuid4())}"
-    project_name = f"crawldata/{domain_name}"
+    project_name = f"crawldata/{domain_name}-{str(uuid.uuid4())}"
 
     QUEUE_FILE = f"{project_name}/queue.txt"
     CRAWLED_FILE = f"{project_name}/crawled.txt"
