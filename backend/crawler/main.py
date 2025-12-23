@@ -8,7 +8,7 @@ import json
 import uuid
 from app.core.database import SessionLocal
 import os
-from app.service.crawlService import CrawlService
+from app.db.repository.crawlRepo import CrawlRepository
 
 
 def run_crawler(
@@ -68,7 +68,7 @@ def run_crawler(
             json.dump(scraped_data, f, ensure_ascii=False, indent=2)
 
         # save to db
-        CrawlService(session=db).save_scraped_pages(job_id, scraped_data)
+        CrawlRepository(session=db).save_scraped_pages(job_id, scraped_data)
 
         # remove files
         if os.path.exists(QUEUE_FILE):
@@ -80,10 +80,10 @@ def run_crawler(
         if os.path.exists(SCRAPED_FILE):
             os.remove(SCRAPED_FILE)
 
-        CrawlService(session=db).complete_job(job_id)
+        CrawlRepository(session=db).complete_job(job_id)
 
     except Exception as e:
-        CrawlService(session=db).fail_job(job_id)
+        CrawlRepository(session=db).fail_job(job_id)
         print("Crawler error:", e)
 
     finally:
