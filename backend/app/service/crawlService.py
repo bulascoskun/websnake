@@ -18,12 +18,12 @@ class CrawlService:
         if not job_exists:
             # Create job
             job = self.__crawlRepository.create_job(url=domain_name)
+
             background_tasks.add_task(
                 run_crawler,
                 homepage=url,
                 job_id=job.id,
             )
-            job = self.__crawlRepository.create_job(url=domain_name)
 
             # Add relation
             self.__crawlRepository.create_user_job_relation(user.id, job.id)

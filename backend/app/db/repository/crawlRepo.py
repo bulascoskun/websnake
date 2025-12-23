@@ -85,8 +85,6 @@ class CrawlRepository(BaseRepository):
             ScrapedPage.job_id.in_(job_ids_arr)
         )
 
-        print({"query": query.all()})
-
         total_count = query.count()
 
         scraped_pages = (

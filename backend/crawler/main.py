@@ -16,6 +16,7 @@ def run_crawler(
     job_id: int,
 ):
     db = SessionLocal()
+    crawl_repo = CrawlRepository(session=db)
 
     domain_name = get_domain_name(homepage)
     project_name = f"crawldata/{domain_name}-{str(uuid.uuid4())}"
@@ -38,27 +39,27 @@ def run_crawler(
             Spider.crawl_page(threading.current_thread().name, url)
             queue.task_done()
 
-    # start workers
-    workers = []
-    for _ in range(THREADS):
-        t = threading.Thread(target=work)
-        t.start()
-        workers.append(t)
-
-    # add jobs
-    for link in list(file_to_set(QUEUE_FILE))[:MAX_LINKS]:
-        queue.put(link)
-
-    queue.join()
-
-    # stop workers
-    for _ in workers:
-        queue.put(None)
-
-    for t in workers:
-        t.join()
-
     try:
+        # start workers
+        workers = []
+        for _ in range(THREADS):
+            t = threading.Thread(target=work)
+            t.start()
+            workers.append(t)
+
+        # add jobs
+        for link in list(file_to_set(QUEUE_FILE))[:MAX_LINKS]:
+            queue.put(link)
+
+        queue.join()
+
+        # stop workers
+        for _ in workers:
+            queue.put(None)
+
+        for t in workers:
+            t.join()
+
         # scrape
         crawled_links = list(file_to_set(CRAWLED_FILE))[:MAX_LINKS]
         scraped_data = scrape_pages(crawled_links)
@@ -68,7 +69,7 @@ def run_crawler(
             json.dump(scraped_data, f, ensure_ascii=False, indent=2)
 
         # save to db
-        CrawlRepository(session=db).save_scraped_pages(job_id, scraped_data)
+        crawl_repo.save_scraped_pages(job_id, scraped_data)
 
         # remove files
         if os.path.exists(QUEUE_FILE):
@@ -80,10 +81,10 @@ def run_crawler(
         if os.path.exists(SCRAPED_FILE):
             os.remove(SCRAPED_FILE)
 
-        CrawlRepository(session=db).complete_job(job_id)
+        crawl_repo.complete_job(job_id)
 
     except Exception as e:
-        CrawlRepository(session=db).fail_job(job_id)
+        crawl_repo.fail_job(job_id)
         print("Crawler error:", e)
 
     finally:
