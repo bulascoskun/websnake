@@ -23,12 +23,17 @@ def start_crawler(
         raise error
 
 
-@crawlerRouter.get("/get_scraped_pages", status_code=200)
-def get_scraped_pages(
-    session: Session = Depends(get_db), user: UserOutput = Depends(get_current_user)
+@crawlerRouter.get("/get_list", status_code=200)
+def get_list(
+    page: int,
+    per_page: int,
+    session: Session = Depends(get_db),
+    user: UserOutput = Depends(get_current_user),
 ):
     try:
-        return CrawlService(session=session).get_scraped_pages()
+        return CrawlService(session=session).get_list(
+            user_id=user.id, page=int(page), per_page=int(per_page)
+        )
     except Exception as error:
         print(error)
         raise error

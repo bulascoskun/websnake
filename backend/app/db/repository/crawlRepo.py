@@ -3,6 +3,7 @@ from app.db.models.crawl_job import CrawlJob
 from app.db.models.scraped_page import ScrapedPage
 from datetime import datetime, UTC
 from app.db.models.users_jobs import UsersJobs
+from typing import Optional
 
 
 class CrawlRepository(BaseRepository):
@@ -42,22 +43,6 @@ class CrawlRepository(BaseRepository):
         self.session.commit()
         print("Saving complete")
 
-    def get_scraped_pages(self):
-        pages = self.session.query(ScrapedPage).limit(200).all()
-
-        return [
-            {
-                "id": p.id,
-                "job_id": p.job_id,
-                "url": p.url,
-                "title": p.title,
-                "description": p.description,
-                "body_preview": p.body_preview,
-                "h1": p.h1,
-            }
-            for p in pages
-        ]
-
     def get_job_by_domain_name(self, domain_name: str):
         return self.session.query(CrawlJob).filter(CrawlJob.url == domain_name).first()
 
@@ -69,10 +54,73 @@ class CrawlRepository(BaseRepository):
         self.session.refresh(instance=new_user_job)
         return new_user_job
 
-    def check_user_has_job(self, user_id: int, job_id: int):
-        existing = (
-            self.session.query(UsersJobs)
-            .filter(UsersJobs.user_id == user_id, UsersJobs.job_id == job_id)
-            .first()
+    def check_user_jobs(self, user_id: int, job_id: Optional[int] = None):
+        query = self.session.query(UsersJobs).filter(UsersJobs.user_id == user_id)
+
+        if job_id is not None:
+            query = query.filter(UsersJobs.job_id == job_id)
+            return query.first()
+        else:
+            return query.all()
+
+    def get_list(self, user_id: int, page: int = 1, per_page: int = 20):
+        user_jobs = self.check_user_jobs(user_id=user_id)
+
+        if not user_jobs:
+            return {
+                "data": [],
+                "pagination": {
+                    "page": page,
+                    "per_page": per_page,
+                    "total_items": 0,
+                    "total_pages": 0,
+                    "has_next": False,
+                    "has_previous": False,
+                },
+            }
+
+        job_ids_arr = [uj.job_id for uj in user_jobs]
+
+        query = self.session.query(ScrapedPage).filter(
+            ScrapedPage.job_id.in_(job_ids_arr)
         )
-        return existing
+
+        print({"query": query.all()})
+
+        total_count = query.count()
+
+        scraped_pages = (
+            query.order_by(ScrapedPage.job_id, ScrapedPage.id)
+            .offset((page - 1) * per_page)
+            .limit(per_page)
+            .all()
+        )
+
+        results = [
+            {
+                "id": p.id,
+                "job_id": p.job_id,
+                "url": p.url,
+                "title": p.title,
+                "description": p.description,
+                "body_preview": p.body_preview,
+                "h1": p.h1,
+            }
+            for p in scraped_pages
+        ]
+
+        total_pages = max(1, (total_count + per_page - 1) // per_page)
+
+        return {
+            "data": results,
+            "pagination": {
+                "page": page,
+                "per_page": per_page,
+                "total_items": total_count,
+                "total_pages": total_pages,
+                "has_next": page < total_pages,
+                "has_previous": page > 1,
+                "next_page": page + 1 if page < total_pages else None,
+                "previous_page": page - 1 if page > 1 else None,
+            },
+        }

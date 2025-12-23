@@ -31,7 +31,9 @@ class CrawlService:
             return {"message": "Success - 1"}
 
         # 2. Check if user has job
-        user_has_job = self.__crawlRepository.check_user_has_job(user.id, job_exists.id)
+        user_has_job = self.__crawlRepository.check_user_jobs(
+            user_id=user.id, job_id=job_exists.id
+        )
 
         if user_has_job:
             raise HTTPException(status_code=400, detail="You have already crawled")
@@ -41,8 +43,8 @@ class CrawlService:
             self.__crawlRepository.create_user_job_relation(user.id, job_exists.id)
             return {"message": "Success - 2"}
 
-    def get_scraped_pages(self):
-        pages = self.__crawlRepository.get_scraped_pages()
+    def get_list(self, user_id, page, per_page):
+        pages = self.__crawlRepository.get_list(user_id, page, per_page)
         if not pages:
             raise HTTPException(status_code=400, detail="Pages not found")
         return pages
