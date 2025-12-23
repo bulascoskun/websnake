@@ -1,9 +1,9 @@
 from fastapi import BackgroundTasks, APIRouter, Depends
 from crawler.main import run_crawler
-from app.db.repository.crawlRepo import create_job
 from sqlalchemy.orm import Session
 from app.core.database import get_db
 from app.db.models.scraped_page import ScrapedPage
+from app.db.repository.crawlRepo import create_job
 
 
 crawlerRouter = APIRouter()

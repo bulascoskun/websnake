@@ -1,13 +1,18 @@
 import threading
 from queue import Queue
-from .spider import Spider
-from .domain import get_domain_name
-from .general import file_to_set
-from .scrape import scrape_pages
+from crawler.spider import Spider
+from crawler.domain import get_domain_name
+from crawler.general import file_to_set
+from crawler.scrape import scrape_pages
 import json
 import uuid
-from app.db.repository.crawlRepo import save_scraped_pages
+from app.db.repository.crawlRepo import (
+    save_scraped_pages,
+    complete_job,
+    fail_job,
+)
 from app.core.database import SessionLocal
+import os
 
 
 def run_crawler(
@@ -57,13 +62,27 @@ def run_crawler(
     for t in workers:
         t.join()
 
-    # scrape
-    crawled_links = list(file_to_set(CRAWLED_FILE))[:MAX_LINKS]
-    scraped_data = scrape_pages(crawled_links)
+    try:
+        # scrape
+        crawled_links = list(file_to_set(CRAWLED_FILE))[:MAX_LINKS]
+        scraped_data = scrape_pages(crawled_links)
 
-    # write to json
-    with open(SCRAPED_FILE, "w", encoding="utf-8") as f:
-        json.dump(scraped_data, f, ensure_ascii=False, indent=2)
+        # write to json
+        with open(SCRAPED_FILE, "w", encoding="utf-8") as f:
+            json.dump(scraped_data, f, ensure_ascii=False, indent=2)
 
-    # save to db
-    save_scraped_pages(db, job_id, scraped_data)
+        # save to db
+        save_scraped_pages(db, job_id, scraped_data)
+
+        # dosyayı sil
+        if os.path.exists(SCRAPED_FILE):
+            os.remove(SCRAPED_FILE)
+
+        complete_job(db, job_id)
+
+    except Exception as e:
+        fail_job(db, job_id)
+        print("Crawler error:", e)
+
+    finally:
+        db.close()

@@ -2,7 +2,7 @@
 from sqlalchemy.orm import Session
 from app.db.models.crawl_job import CrawlJob
 from app.db.models.scraped_page import ScrapedPage
-from datetime import datetime
+from datetime import datetime, UTC
 
 
 def create_job(db: Session, url: str) -> CrawlJob:
@@ -17,7 +17,7 @@ def complete_job(db: Session, job_id: int):
     job = db.get(CrawlJob, job_id)
     if job:
         job.status = "completed"
-        job.finished_at = datetime.utcnow()
+        job.finished_at = datetime.now(UTC)
         db.commit()
 
 
