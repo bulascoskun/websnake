@@ -1,10 +1,8 @@
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI
 from fastapi.openapi.utils import get_openapi
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from app.util.init_db import create_tables
-from app.util.protectRoute import get_current_user
-from app.db.schema.user import UserOutput
 from app.routers.auth import authRouter
 from app.routers.crawler import crawlerRouter
 
@@ -58,8 +56,3 @@ app.include_router(router=crawlerRouter, tags=["crawler"], prefix="/crawler")
 @app.get("/status")
 def health_check():
     return {"status": "Running..."}
-
-
-@app.get("/protected")
-def read_protected(user: UserOutput = Depends(get_current_user)):
-    return {"data": user}

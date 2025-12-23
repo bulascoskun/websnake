@@ -71,11 +71,11 @@ def run_crawler(
         CrawlService(session=db).save_scraped_pages(job_id, scraped_data)
 
         # remove files
-        if os.path.exists(SCRAPED_FILE):
-            os.remove(SCRAPED_FILE)
+        if os.path.exists(QUEUE_FILE):
+            os.remove(QUEUE_FILE)
 
-        if os.path.exists(SCRAPED_FILE):
-            os.remove(SCRAPED_FILE)
+        if os.path.exists(CRAWLED_FILE):
+            os.remove(CRAWLED_FILE)
 
         if os.path.exists(SCRAPED_FILE):
             os.remove(SCRAPED_FILE)
