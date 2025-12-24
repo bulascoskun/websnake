@@ -13,6 +13,7 @@ type AuthState = {
   isAuthenticated: boolean;
   login: (user: User) => void;
   logout: () => void;
+  updateUser: (updatedFields: object) => void;
 };
 
 export const useAuthStore = create<AuthState>()(
@@ -32,6 +33,11 @@ export const useAuthStore = create<AuthState>()(
           user: null,
           isAuthenticated: false,
         }),
+
+      updateUser: (updatedFields: object) =>
+        set((state) => ({
+          user: state.user ? { ...state.user, ...updatedFields } : state.user,
+        })),
     }),
     {
       name: 'auth-storage',

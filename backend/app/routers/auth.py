@@ -32,7 +32,7 @@ def register(registerDetails: UserInCreate, session: Session = Depends(get_db)):
         raise error
 
 
-@authRouter.post("/update-user", status_code=200)
+@authRouter.post("/update_user", status_code=200)
 def update_user(
     update_details: UserReUpdate,
     session: Session = Depends(get_db),
