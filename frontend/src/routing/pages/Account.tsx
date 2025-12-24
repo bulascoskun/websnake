@@ -15,6 +15,7 @@ import { toast } from 'sonner';
 import * as z from 'zod';
 import { useAuthStore } from '@/store/useAuthStore';
 import useApi from '@/hooks/useApi';
+import { useState } from 'react';
 
 const formSchema = z.object({
   email: z
@@ -36,6 +37,8 @@ const Account = () => {
   const user = useAuthStore((state) => state.user);
   const updateUser = useAuthStore((state) => state.updateUser);
 
+  const [loading, setLoading] = useState<boolean>(false);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -47,6 +50,7 @@ const Account = () => {
 
   const onSubmit = async (payload: z.infer<typeof formSchema>) => {
     try {
+      setLoading(true);
       const { data } = await api.post('/auth/update_user', payload);
 
       updateUser({
@@ -58,6 +62,8 @@ const Account = () => {
       toast.success('Update successful.');
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -146,7 +152,7 @@ const Account = () => {
         </form>
 
         <CardAction>
-          <Button type="submit" form="form-login">
+          <Button type="submit" form="form-login" loading={loading}>
             Save
           </Button>
         </CardAction>

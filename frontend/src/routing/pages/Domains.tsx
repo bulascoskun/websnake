@@ -1,9 +1,10 @@
+import { DomainsTable } from '@/components/DomainsTable';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardAction,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
@@ -12,18 +13,19 @@ const Domains = () => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Card Title</CardTitle>
-        <CardDescription>Card Description</CardDescription>
-        <CardAction>Card Action</CardAction>
+        <CardTitle>Domains</CardTitle>
+        <CardDescription>
+          Here you can view the domains you've crawled, or add domains to crawl
+          using the button on the side.
+        </CardDescription>
+        <CardAction>
+          <Button>Add Domain</Button>
+        </CardAction>
       </CardHeader>
 
       <CardContent>
-        <p>Card Content</p>
+        <DomainsTable />
       </CardContent>
-
-      <CardFooter>
-        <p>Card Footer</p>
-      </CardFooter>
     </Card>
   );
 };
