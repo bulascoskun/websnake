@@ -1,4 +1,4 @@
-import RecentDomainsTable from '@/components/RecentDomainsTable';
+import DomainsTable from '@/components/DomainsTable';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -16,6 +16,7 @@ import {
 } from '@/components/ui/tooltip';
 import { useEffect } from 'react';
 import useApi from '@/hooks/useApi';
+import SkeletonTable from '@/components/ui/skeleton-table';
 
 const Home = () => {
   const { data, loading: loading, error: _err, execute } = useApi();
@@ -86,6 +87,7 @@ const Home = () => {
                     variant="outline"
                     size="icon"
                     aria-label="Refresh"
+                    disabled={loading}
                   >
                     <RefreshCcw />
                   </Button>
@@ -96,9 +98,13 @@ const Home = () => {
               </Tooltip>
             </div>
           </CardTitle>
-          <Separator />
 
-          <RecentDomainsTable tableData={data?.data || []} />
+          <Separator />
+          {loading ? (
+            <SkeletonTable />
+          ) : (
+            <DomainsTable tableData={data?.data || []} />
+          )}
         </CardHeader>
       </Card>
     </>

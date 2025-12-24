@@ -24,7 +24,7 @@ const Domains = () => {
       </CardHeader>
 
       <CardContent>
-        <DomainsTable />
+        <DomainsTable tableData={[]} />
       </CardContent>
     </Card>
   );

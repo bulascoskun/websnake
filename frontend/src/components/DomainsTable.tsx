@@ -3,85 +3,89 @@ import {
   TableBody,
   TableCaption,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import {
+  capitalizeFirstLetter,
+  formatDate,
+  formatOnlyHour,
+} from '@/utils/helpers';
+import type { Domain } from '@/types';
+import { ArrowRightIcon } from 'lucide-react';
+import { Button } from './ui/button';
+import { Link } from 'react-router';
+import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
 
-const invoices = [
-  {
-    invoice: 'INV001',
-    paymentStatus: 'Paid',
-    totalAmount: '$250.00',
-    paymentMethod: 'Credit Card',
-  },
-  {
-    invoice: 'INV002',
-    paymentStatus: 'Pending',
-    totalAmount: '$150.00',
-    paymentMethod: 'PayPal',
-  },
-  {
-    invoice: 'INV003',
-    paymentStatus: 'Unpaid',
-    totalAmount: '$350.00',
-    paymentMethod: 'Bank Transfer',
-  },
-  {
-    invoice: 'INV004',
-    paymentStatus: 'Paid',
-    totalAmount: '$450.00',
-    paymentMethod: 'Credit Card',
-  },
-  {
-    invoice: 'INV005',
-    paymentStatus: 'Paid',
-    totalAmount: '$550.00',
-    paymentMethod: 'PayPal',
-  },
-  {
-    invoice: 'INV006',
-    paymentStatus: 'Pending',
-    totalAmount: '$200.00',
-    paymentMethod: 'Bank Transfer',
-  },
-  {
-    invoice: 'INV007',
-    paymentStatus: 'Unpaid',
-    totalAmount: '$300.00',
-    paymentMethod: 'Credit Card',
-  },
-];
+const statusColors: any = {
+  failed: 'bg-red-500',
+  completed: 'bg-green-600',
+  processing: 'bg-orange-400',
+};
 
-const DomainsTable = () => {
+const DomainsTable = ({ tableData }: { tableData: Domain[] }) => {
   return (
     <Table>
-      <TableCaption>A list of your recent invoices.</TableCaption>
+      <TableCaption>A list of your recent crawlings.</TableCaption>
       <TableHeader>
         <TableRow>
-          <TableHead className="w-[100px]">Invoice</TableHead>
-          <TableHead>Status</TableHead>
-          <TableHead>Method</TableHead>
-          <TableHead className="text-right">Amount</TableHead>
+          <TableHead className="w-30">Status</TableHead>
+          <TableHead>Domain</TableHead>
+          <TableHead>Crawl Time</TableHead>
+          <TableHead></TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {invoices.map((invoice) => (
-          <TableRow key={invoice.invoice}>
-            <TableCell className="font-medium">{invoice.invoice}</TableCell>
-            <TableCell>{invoice.paymentStatus}</TableCell>
-            <TableCell>{invoice.paymentMethod}</TableCell>
-            <TableCell className="text-right">{invoice.totalAmount}</TableCell>
+        {tableData.map((domain: Domain) => (
+          <TableRow key={domain.id}>
+            <TableCell className="w-25">
+              <div className="flex gap-2 items-center">
+                <div
+                  className={`size-4 rounded-full ${
+                    domain.status && statusColors[domain.status]
+                  }`}
+                ></div>
+                <div className="text-xs">
+                  {capitalizeFirstLetter(domain.status)}
+                </div>
+              </div>
+            </TableCell>
+            <TableCell className="font-medium">{domain.url}</TableCell>
+            <TableCell>
+              <div>
+                <span className="mr-1 text-xs">
+                  {formatDate(domain.created_at)}
+                </span>
+                <span className="font-medium">
+                  {formatOnlyHour(domain.created_at)}
+                </span>
+                <span className="p-2">-</span>
+                <span className="mr-1 text-xs">
+                  {formatDate(domain.updated_at)}
+                </span>
+                <span className="font-medium">
+                  {formatOnlyHour(domain.updated_at)}
+                </span>
+              </div>
+            </TableCell>
+            <TableCell className=" text-right">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Link to={`/domains/${domain.id}`}>
+                    <Button size="icon" aria-label="View Detail">
+                      <ArrowRightIcon />
+                    </Button>
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <div className="py-1">View Detail</div>
+                </TooltipContent>
+              </Tooltip>
+            </TableCell>
           </TableRow>
         ))}
       </TableBody>
-      <TableFooter>
-        <TableRow>
-          <TableCell colSpan={3}>Total</TableCell>
-          <TableCell className="text-right">$2,500.00</TableCell>
-        </TableRow>
-      </TableFooter>
     </Table>
   );
 };

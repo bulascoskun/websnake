@@ -14,8 +14,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
 import * as z from 'zod';
 import { useAuthStore } from '@/store/useAuthStore';
-import useAxios from '@/hooks/useAxios';
-import { useState } from 'react';
+import useApi from '@/hooks/useApi';
 
 const formSchema = z.object({
   email: z
@@ -33,11 +32,10 @@ const formSchema = z.object({
 });
 
 const Account = () => {
-  const api = useAxios();
   const user = useAuthStore((state) => state.user);
   const updateUser = useAuthStore((state) => state.updateUser);
 
-  const [loading, setLoading] = useState<boolean>(false);
+  const { data, loading: loading, error: _err, execute } = useApi();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -49,22 +47,19 @@ const Account = () => {
   });
 
   const onSubmit = async (payload: z.infer<typeof formSchema>) => {
-    try {
-      setLoading(true);
-      const { data } = await api.post('/auth/update_user', payload);
+    await execute({
+      method: 'POST',
+      url: '/auth/update_user',
+      data: payload,
+    });
 
-      updateUser({
-        email: data.email,
-        first_name: data.first_name,
-        last_name: data.last_name,
-      });
+    updateUser({
+      email: data.email,
+      first_name: data.first_name,
+      last_name: data.last_name,
+    });
 
-      toast.success('Update successful.');
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
+    toast.success('Update successful.');
   };
 
   return (
