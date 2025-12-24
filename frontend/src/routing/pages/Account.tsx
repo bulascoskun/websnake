@@ -14,7 +14,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
 import * as z from 'zod';
 import { useAuthStore } from '@/store/useAuthStore';
-import useApi from '@/hooks/useApi';
+import useAxios from '@/hooks/useAxios';
 import { useState } from 'react';
 
 const formSchema = z.object({
@@ -33,7 +33,7 @@ const formSchema = z.object({
 });
 
 const Account = () => {
-  const api = useApi();
+  const api = useAxios();
   const user = useAuthStore((state) => state.user);
   const updateUser = useAuthStore((state) => state.updateUser);
 

@@ -14,27 +14,21 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import useApi from '@/hooks/useApi';
 
 const Home = () => {
-  const api = useApi();
-
-  const [tableData, setTableData] = useState([]);
+  const { data, loading: loading, error: _err, execute } = useApi();
 
   const getList = async () => {
-    try {
-      const { data } = await api.get('/crawler/get_domains', {
-        params: {
-          page: 1,
-          per_page: 5,
-        },
-      });
-      setTableData(data.data);
-      return data;
-    } catch (error) {
-      throw error;
-    }
+    await execute({
+      method: 'GET',
+      url: '/crawler/get_domains',
+      params: {
+        page: 1,
+        per_page: 5,
+      },
+    });
   };
 
   useEffect(() => {
@@ -103,7 +97,8 @@ const Home = () => {
             </div>
           </CardTitle>
           <Separator />
-          <RecentDomainsTable tableData={tableData} />
+
+          <RecentDomainsTable tableData={data?.data || []} />
         </CardHeader>
       </Card>
     </>

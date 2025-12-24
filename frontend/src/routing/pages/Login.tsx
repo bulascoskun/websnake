@@ -21,7 +21,7 @@ import { toast } from 'sonner';
 import { Toaster } from '@/components/ui/sonner';
 import { useAuthStore } from '@/store/useAuthStore';
 import * as z from 'zod';
-import useApi from '@/hooks/useApi';
+import useAxios from '@/hooks/useAxios';
 
 const formSchema = z.object({
   email: z
@@ -35,7 +35,7 @@ const formSchema = z.object({
 });
 
 const Login = () => {
-  const api = useApi();
+  const api = useAxios();
   const navigate = useNavigate();
 
   const login = useAuthStore((state) => state.login);

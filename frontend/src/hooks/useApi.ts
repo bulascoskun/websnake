@@ -1,55 +1,44 @@
-import axios from 'axios';
-import { useAuthStore } from '@/store/useAuthStore';
-import { useMemo } from 'react';
-import { toast } from 'sonner';
-import { useNavigate } from 'react-router';
+import { useState, useCallback } from 'react';
+import { type AxiosRequestConfig } from 'axios';
+import useAxios from '@/hooks/useAxios';
 
-const useApi = () => {
-  const navigate = useNavigate();
-  const token = useAuthStore((state) => state?.user?.token);
-  const logout = useAuthStore((state) => state.logout);
-
-  const api = useMemo(() => {
-    const instance = axios.create({
-      baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8000',
-    });
-
-    instance.interceptors.request.use(
-      (config) => {
-        if (token) {
-          config.headers.Authorization = `Bearer ${token}`;
-        }
-        return config;
-      },
-      (error) => Promise.reject(error)
-    );
-
-    instance.interceptors.response.use(
-      (response) => response,
-      (error) => {
-        let errorMessage;
-
-        if (error?.response?.status === 401) {
-          logout();
-          navigate('/auth/login');
-
-          return Promise.reject(error);
-        }
-
-        if (typeof error?.response?.data?.detail === 'string') {
-          errorMessage = error?.response?.data?.detail;
-        } else {
-          errorMessage = 'There was an error';
-        }
-        toast.error(errorMessage);
-
-        return Promise.reject(error);
-      }
-    );
-
-    return instance;
-  }, []);
-
-  return api;
+type UseApiResult<T> = {
+  data: T | null;
+  loading: boolean;
+  error: string | null;
+  execute: (config: AxiosRequestConfig) => Promise<T>;
 };
+
+function useApi<T = any>(): UseApiResult<T> {
+  const api = useAxios();
+
+  const [data, setData] = useState<T | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const execute = useCallback(
+    async (config: AxiosRequestConfig): Promise<T> => {
+      setLoading(true);
+      setError(null);
+
+      try {
+        const response = await api.request<T>(config);
+        setData(response.data);
+        return response.data;
+      } catch (err: any) {
+        const message =
+          err?.response?.data?.detail || err?.message || 'There was an error';
+
+        setError(message);
+        throw err;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [api]
+  );
+
+  return { data, loading, error, execute };
+}
+
 export default useApi;
