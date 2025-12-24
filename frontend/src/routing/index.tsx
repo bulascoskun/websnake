@@ -2,21 +2,27 @@ import { createBrowserRouter, Navigate } from 'react-router';
 // Pages
 import { Domains, Login, Register, Home } from './pages';
 import { AuthLayout, DashboardLayout } from './layouts';
+import ProtectedRoute from '@/components/ProtectedRoute';
 
 export default createBrowserRouter([
   {
-    path: '/',
-    Component: DashboardLayout,
+    Component: ProtectedRoute,
     children: [
-      { index: true, Component: Home },
       {
-        path: 'domains',
-        Component: Domains,
-        children: [{ path: ':id', Component: Domains }],
+        path: '/',
+        Component: DashboardLayout,
+        children: [
+          { index: true, Component: Home },
+          {
+            path: 'domains',
+            Component: Domains,
+            children: [{ path: ':id', Component: Domains }],
+          },
+          { path: 'add-domain', Component: Domains },
+          { path: 'insights', Component: Domains },
+          { path: 'account', Component: Domains },
+        ],
       },
-      { path: 'add-domain', Component: Domains },
-      { path: 'insights', Component: Domains },
-      { path: 'account', Component: Domains },
     ],
   },
   {
