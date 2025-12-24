@@ -13,7 +13,6 @@ import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
 import * as z from 'zod';
-import api from '@/api/axios';
 import { useAuthStore } from '@/store/useAuthStore';
 
 const formSchema = z.object({
@@ -45,7 +44,7 @@ const Account = () => {
 
   const onSubmit = async (payload: z.infer<typeof formSchema>) => {
     try {
-      // await api.post('/auth/register', payload);
+      // await useApi.post('/auth/register', payload);
       toast.success('Update successful.');
     } catch (error) {
       console.error(error);

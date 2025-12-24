@@ -6,8 +6,31 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import useApi from '@/hooks/useApi';
+import { useEffect } from 'react';
 
 const Home = () => {
+  const api = useApi();
+
+  const getList = async () => {
+    try {
+      const { data } = await api.get('/crawler/get_list', {
+        params: {
+          input_job_id: 3,
+          page: 1,
+          per_page: 20,
+        },
+      });
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  useEffect(() => {
+    getList();
+  });
+
   return (
     <>
       <Card>

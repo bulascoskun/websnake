@@ -1,4 +1,3 @@
-import api from '@/api/axios';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -15,6 +14,7 @@ import {
   FieldLabel,
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import useApi from '@/hooks/useApi';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router';
@@ -50,6 +50,7 @@ const formSchema = z
   });
 
 const Register = () => {
+  const api = useApi();
   const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof formSchema>>({

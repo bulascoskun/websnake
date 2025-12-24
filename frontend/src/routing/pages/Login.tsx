@@ -14,7 +14,6 @@ import {
   FieldLabel,
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import api from '@/api/axios';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router';
@@ -22,6 +21,7 @@ import { toast } from 'sonner';
 import { Toaster } from '@/components/ui/sonner';
 import { useAuthStore } from '@/store/useAuthStore';
 import * as z from 'zod';
+import useApi from '@/hooks/useApi';
 
 const formSchema = z.object({
   email: z
@@ -35,6 +35,7 @@ const formSchema = z.object({
 });
 
 const Login = () => {
+  const api = useApi();
   const navigate = useNavigate();
 
   const login = useAuthStore((state) => state.login);
