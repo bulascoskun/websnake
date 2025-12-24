@@ -7,8 +7,6 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { useEffect, useState } from 'react';
-import useApi from '@/hooks/useApi';
 import {
   capitalizeFirstLetter,
   formatDate,
@@ -26,30 +24,7 @@ const statusColors: any = {
   processing: 'bg-orange-400',
 };
 
-const RecentDomainsTable = () => {
-  const api = useApi();
-
-  const [tableData, setTableData] = useState([]);
-
-  const getList = async () => {
-    try {
-      const { data } = await api.get('/crawler/get_domains', {
-        params: {
-          page: 1,
-          per_page: 5,
-        },
-      });
-      setTableData(data.data);
-      return data;
-    } catch (error) {
-      throw error;
-    }
-  };
-
-  useEffect(() => {
-    getList();
-  }, []);
-
+const RecentDomainsTable = ({ tableData }: { tableData: Domain[] }) => {
   return (
     <Table>
       <TableCaption>A list of your recent crawlings.</TableCaption>

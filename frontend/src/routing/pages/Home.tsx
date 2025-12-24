@@ -1,4 +1,5 @@
 import RecentDomainsTable from '@/components/RecentDomainsTable';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -7,8 +8,39 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
+import { RefreshCcw } from 'lucide-react';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
+import { useEffect, useState } from 'react';
+import useApi from '@/hooks/useApi';
 
 const Home = () => {
+  const api = useApi();
+
+  const [tableData, setTableData] = useState([]);
+
+  const getList = async () => {
+    try {
+      const { data } = await api.get('/crawler/get_domains', {
+        params: {
+          page: 1,
+          per_page: 5,
+        },
+      });
+      setTableData(data.data);
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  useEffect(() => {
+    getList();
+  }, []);
+
   return (
     <>
       <Card>
@@ -28,30 +60,50 @@ const Home = () => {
         <Card className="col-span-4">
           <CardHeader>
             <CardTitle>Total Domains</CardTitle>
-            <CardDescription> 12 </CardDescription>
+            <CardDescription> TODO: </CardDescription>
           </CardHeader>
         </Card>
 
         <Card className="col-span-4">
           <CardHeader>
             <CardTitle>Last crawl</CardTitle>
-            <CardDescription> 2h ago </CardDescription>
+            <CardDescription> TODO: </CardDescription>
           </CardHeader>
         </Card>
 
         <Card className="col-span-4">
           <CardHeader>
             <CardTitle>Avg confidence</CardTitle>
-            <CardDescription> 0.78 </CardDescription>
+            <CardDescription> TODO: </CardDescription>
           </CardHeader>
         </Card>
       </div>
 
       <Card className="mt-4 lg:mt-6">
         <CardHeader>
-          <CardTitle>Recent Domains</CardTitle>
+          <CardTitle>
+            <div className="flex justify-between items-center">
+              <div>Recent Domains</div>
+
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    onClick={getList}
+                    variant="outline"
+                    size="icon"
+                    aria-label="Refresh"
+                  >
+                    <RefreshCcw />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <div className="py-1">View Detail</div>
+                </TooltipContent>
+              </Tooltip>
+            </div>
+          </CardTitle>
           <Separator />
-          <RecentDomainsTable />
+          <RecentDomainsTable tableData={tableData} />
         </CardHeader>
       </Card>
     </>
