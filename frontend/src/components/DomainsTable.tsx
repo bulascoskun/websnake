@@ -24,10 +24,18 @@ const statusColors: any = {
   processing: 'bg-orange-400',
 };
 
-const DomainsTable = ({ tableData }: { tableData: Domain[] }) => {
+const DomainsTable = ({
+  tableData,
+  nocaption = false,
+}: {
+  tableData: Domain[];
+  nocaption?: boolean;
+}) => {
   return (
     <Table>
-      <TableCaption>A list of your recent crawlings.</TableCaption>
+      {!nocaption && (
+        <TableCaption>A list of your recent crawlings.</TableCaption>
+      )}
       <TableHeader>
         <TableRow>
           <TableHead className="w-30">Status</TableHead>
