@@ -24,3 +24,15 @@ class UserRepository(BaseRepository):
     def get_user_by_id(self, user_id: int) -> User:
         user = self.session.query(User).filter_by(id=user_id).first()
         return user
+
+    def update_user_with_details(self, user, update_details):
+        data = update_details.model_dump(exclude_unset=True)
+
+        for field, value in data.items():
+            setattr(user, field, value)
+
+        self.session.add(user)
+        self.session.commit()
+        self.session.refresh(user)
+
+        return user

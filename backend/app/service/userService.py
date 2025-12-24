@@ -1,5 +1,11 @@
 from app.db.repository.userRepo import UserRepository
-from app.db.schema.user import UserOutput, UserInCreate, UserInLogin, UserWithToken
+from app.db.schema.user import (
+    UserOutput,
+    UserInCreate,
+    UserInLogin,
+    UserWithToken,
+    UserReUpdate,
+)
 from app.core.security.hashHelper import HashHelper
 from app.core.security.authHandler import AuthHandler
 from sqlalchemy.orm import Session
@@ -47,3 +53,24 @@ class UserService:
         if not user:
             raise HTTPException(status_code=400, detail="User not found")
         return user
+
+    def update_user(
+        self,
+        user_id,
+        update_details,
+    ) -> UserReUpdate:
+        # get_user_by_id
+        user = self.__userRepository.get_user_by_id(user_id=user_id)
+        if not user:
+            raise HTTPException(status_code=400, detail="User not found")
+
+        # update found user with update_details
+        updated_user = self.__userRepository.update_user_with_details(
+            user, update_details
+        )
+
+        return UserReUpdate(
+            first_name=updated_user.first_name,
+            last_name=updated_user.last_name,
+            email=updated_user.email,
+        )

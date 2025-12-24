@@ -34,3 +34,9 @@ class UserWithToken(BaseModel):
     last_name: str
     email: EmailStr
     token: str
+
+
+class UserReUpdate(BaseModel):
+    first_name: str
+    last_name: str
+    email: EmailStr

@@ -1,8 +1,15 @@
-from app.db.schema.user import UserInCreate, UserInLogin, UserWithToken, UserOutput
+from app.db.schema.user import (
+    UserInCreate,
+    UserInLogin,
+    UserWithToken,
+    UserOutput,
+    UserReUpdate,
+)
 from app.service.userService import UserService
 from fastapi import APIRouter, Depends
 from app.core.database import get_db
 from sqlalchemy.orm import Session
+from app.util.protectRoute import get_current_user
 
 authRouter = APIRouter()
 
@@ -20,6 +27,22 @@ def login(loginDetails: UserInLogin, session: Session = Depends(get_db)):
 def register(registerDetails: UserInCreate, session: Session = Depends(get_db)):
     try:
         return UserService(session=session).signup(user_details=registerDetails)
+    except Exception as error:
+        print(error)
+        raise error
+
+
+@authRouter.post("/update-user", status_code=200)
+def update_user(
+    update_details: UserReUpdate,
+    session: Session = Depends(get_db),
+    user: UserOutput = Depends(get_current_user),
+):
+    try:
+        return UserService(session=session).update_user(
+            user_id=user.id,
+            update_details=update_details,
+        )
     except Exception as error:
         print(error)
         raise error
