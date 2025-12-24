@@ -50,9 +50,3 @@ app.include_router(router=authRouter, tags=["auth"], prefix="/auth")
 
 # Crawler Router
 app.include_router(router=crawlerRouter, tags=["crawler"], prefix="/crawler")
-
-
-# Default (for testing)
-@app.get("/status")
-def health_check():
-    return {"status": "Running..."}
