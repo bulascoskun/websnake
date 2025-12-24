@@ -41,3 +41,21 @@ def get_list(
     except Exception as error:
         print(error)
         raise error
+
+
+@crawlerRouter.get("/get_domains", status_code=200)
+def get_domains(
+    page: int,
+    per_page: int,
+    session: Session = Depends(get_db),
+    user: UserOutput = Depends(get_current_user),
+):
+    try:
+        return CrawlService(session=session).get_domains(
+            user_id=user.id,
+            page=int(page),
+            per_page=int(per_page),
+        )
+    except Exception as error:
+        print(error)
+        raise error

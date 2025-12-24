@@ -1,3 +1,4 @@
+from sqlalchemy import func
 from .base import BaseRepository
 from app.db.models.crawl_job import CrawlJob
 from app.db.models.scraped_page import ScrapedPage
@@ -71,6 +72,7 @@ class CrawlRepository(BaseRepository):
         page: int = 1,
         per_page: int = 20,
     ):
+        # TODO: make this like get_crawl_jobs_paginated
         user_jobs = self.check_user_jobs(user_id=user_id)
 
         if not user_jobs:
@@ -131,3 +133,19 @@ class CrawlRepository(BaseRepository):
                 "previous_page": page - 1 if page > 1 else None,
             },
         }
+
+    def get_crawl_jobs_paginated(
+        self,
+        job_ids: list[int],
+        limit: int,
+        offset: int,
+    ):
+        query = self.session.query(CrawlJob).filter(CrawlJob.id.in_(job_ids))
+
+        total = query.with_entities(func.count()).scalar()
+
+        items = (
+            query.order_by(CrawlJob.created_at.desc()).limit(limit).offset(offset).all()
+        )
+
+        return items, total

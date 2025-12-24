@@ -50,3 +50,27 @@ class CrawlService:
         if not pages:
             raise HTTPException(status_code=400, detail="Pages not found")
         return pages
+
+    def get_domains(self, user_id: int, page: int, per_page: int):
+        users_jobs = self.__crawlRepository.check_user_jobs(user_id=user_id)
+
+        if not users_jobs:
+            raise HTTPException(status_code=400, detail="Pages not found")
+
+        job_ids = [uj.job_id for uj in users_jobs]
+
+        offset = (page - 1) * per_page
+
+        items, total = self.__crawlRepository.get_crawl_jobs_paginated(
+            job_ids=job_ids,
+            limit=per_page,
+            offset=offset,
+        )
+
+        return {
+            "data": items,
+            "page": page,
+            "per_page": per_page,
+            "total": total,
+            "total_pages": (total + per_page - 1) // per_page,
+        }
