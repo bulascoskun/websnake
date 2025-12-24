@@ -1,4 +1,4 @@
-import HomeDomainTable from '@/components/HomeDomainTable';
+import RecentDomainsTable from '@/components/RecentDomainsTable';
 import {
   Card,
   CardContent,
@@ -6,31 +6,9 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import useApi from '@/hooks/useApi';
-import { useEffect } from 'react';
+import { Separator } from '@/components/ui/separator';
 
 const Home = () => {
-  const api = useApi();
-
-  const getList = async () => {
-    try {
-      const { data } = await api.get('/crawler/get_list', {
-        params: {
-          input_job_id: 3,
-          page: 1,
-          per_page: 20,
-        },
-      });
-      return data;
-    } catch (error) {
-      throw error;
-    }
-  };
-
-  useEffect(() => {
-    getList();
-  });
-
   return (
     <>
       <Card>
@@ -72,7 +50,8 @@ const Home = () => {
       <Card className="mt-4 lg:mt-6">
         <CardHeader>
           <CardTitle>Recent Domains</CardTitle>
-          <HomeDomainTable />
+          <Separator />
+          <RecentDomainsTable />
         </CardHeader>
       </Card>
     </>

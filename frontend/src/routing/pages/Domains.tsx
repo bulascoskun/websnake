@@ -1,4 +1,4 @@
-import { DomainsTable } from '@/components/DomainsTable';
+import DomainsTable from '@/components/DomainsTable';
 import { Button } from '@/components/ui/button';
 import {
   Card,
