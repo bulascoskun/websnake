@@ -1,6 +1,6 @@
 import { createBrowserRouter, Navigate } from 'react-router';
 // Pages
-import { Domains, Login, Register, Home } from './pages';
+import { Domains, Login, Register, Home, Account } from './pages';
 import { AuthLayout, DashboardLayout } from './layouts';
 import ProtectedRoute from '@/components/ProtectedRoute';
 
@@ -18,9 +18,8 @@ export default createBrowserRouter([
             Component: Domains,
             children: [{ path: ':id', Component: Domains }],
           },
-          { path: 'add-domain', Component: Domains },
           { path: 'insights', Component: Domains },
-          { path: 'account', Component: Domains },
+          { path: 'account', Component: Account },
         ],
       },
     ],

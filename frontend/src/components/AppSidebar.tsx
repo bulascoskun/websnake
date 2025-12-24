@@ -1,7 +1,7 @@
 import { Separator } from '@/components/ui/separator';
 import websnakeLogo from '@/assets/websnake.svg';
 import CustomSidebarFooter from './CustomSidebarFooter';
-import { List, User, Plus, Brain, Home } from 'lucide-react';
+import { List, User, Brain, Home } from 'lucide-react';
 import {
   Sidebar,
   SidebarContent,
@@ -25,11 +25,6 @@ const items = [
     title: 'Domains',
     url: '/domains',
     icon: List,
-  },
-  {
-    title: 'Add Domain',
-    url: '/add-domain',
-    icon: Plus,
   },
   {
     title: 'Insights',
