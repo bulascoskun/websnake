@@ -81,7 +81,13 @@ def run_crawler(
         if os.path.exists(SCRAPED_FILE):
             os.remove(SCRAPED_FILE)
 
-        crawl_repo.complete_job(job_id)
+        page_count = crawl_repo.get_page_count_by_job_id(job_id)
+        print(f"PAGE COUNT = {page_count}")
+
+        if page_count >= 2:
+            crawl_repo.complete_job(job_id)
+        else:
+            crawl_repo.fail_job(job_id)
 
     except Exception as e:
         crawl_repo.fail_job(job_id)

@@ -81,6 +81,14 @@ class CrawlRepository(BaseRepository):
 
         return items, total
 
+    def get_page_count_by_job_id(
+        self,
+        job_id,
+    ):
+        query = self.session.query(ScrapedPage).filter(ScrapedPage.job_id == job_id)
+        total = query.with_entities(func.count()).scalar()
+        return total
+
     def get_crawl_jobs_paginated(
         self,
         job_ids: list[int],
