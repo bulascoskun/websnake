@@ -12,11 +12,12 @@ insightRouter = APIRouter()
 @insightRouter.post("/create-insight", status_code=201)
 def create_insight(
     input: str,
+    job_id: int,
     session: Session = Depends(get_db),
     user: UserOutput = Depends(get_current_user),
 ):
     try:
-        return InsightService(session=session).create_insight(input, user)
+        return InsightService(session=session).create_insight(input, job_id, user)
     except Exception as error:
         print(error)
         raise error

@@ -22,7 +22,6 @@ const DomainDetail = () => {
 
   const [domainData, setDomainData] = useState<Domain>();
   const [pageData, setPageData] = useState([]);
-  const [crawlData, setCrawlData] = useState<CrawlPageData[] | []>([]);
 
   const getList = async () => {
     const { data, domain_data: domainData } = await execute({
@@ -37,7 +36,6 @@ const DomainDetail = () => {
 
     const urlArr = data.map((domain: { url: string }) => domain.url);
 
-    setCrawlData(data);
     setPageData(urlArr);
     setDomainData(domainData);
   };
@@ -117,7 +115,7 @@ const DomainDetail = () => {
             <CardTitle>AI insights for {domainData?.url}</CardTitle>
 
             <CardAction>
-              <AddInsight getList={() => {}} crawlData={crawlData} />
+              <AddInsight getList={() => {}} />
             </CardAction>
           </CardHeader>
 

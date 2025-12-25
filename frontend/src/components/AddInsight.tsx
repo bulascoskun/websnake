@@ -17,18 +17,16 @@ import { useState } from 'react';
 import useApi from '@/hooks/useApi';
 import * as z from 'zod';
 import type { CrawlPageData } from '@/types';
+import { Textarea } from './ui/textarea';
+import { useParams } from 'react-router';
 
 const formSchema = z.object({
   input: z.string().min(1, "You haven't asked anything"),
 });
 
-export function AddInsight({
-  getList,
-  crawlData,
-}: {
-  getList: () => void;
-  crawlData: CrawlPageData[];
-}) {
+export function AddInsight({ getList }: { getList: () => void }) {
+  const { id } = useParams();
+
   const [open, setOpen] = useState(false);
   const { loading: loading, execute } = useApi();
 
@@ -54,8 +52,12 @@ export function AddInsight({
     }
   };
 
+  const handleOpenChange = () => {
+    form.reset();
+  };
+
   return (
-    <Dialog open={open}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <form id="form-insight" onSubmit={form.handleSubmit(onSubmit)}>
         <DialogTrigger asChild>
           <Button onClick={() => setOpen(true)}>Add Insight</Button>
@@ -74,9 +76,10 @@ export function AddInsight({
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <Input
+                  <Textarea
                     {...field}
                     id="form-insight"
+                    className="min-h-32"
                     aria-invalid={fieldState.invalid}
                     placeholder="Ask anything"
                   />
