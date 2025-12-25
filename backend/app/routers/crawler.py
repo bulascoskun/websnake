@@ -33,7 +33,7 @@ def get_list(
 ):
     try:
         return CrawlService(session=session).get_list(
-            input_job_id=int(input_job_id),
+            job_id=int(input_job_id),
             user_id=user.id,
             page=int(page),
             per_page=int(per_page),

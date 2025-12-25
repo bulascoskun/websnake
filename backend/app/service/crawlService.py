@@ -43,13 +43,37 @@ class CrawlService:
             self.__crawlRepository.create_user_job_relation(user.id, job_exists.id)
             return {"message": "Success - 2"}
 
-    def get_list(self, input_job_id, user_id, page, per_page):
-        pages = self.__crawlRepository.get_list(
-            input_job_id=input_job_id, user_id=user_id, page=page, per_page=per_page
+    def get_list(self, job_id, user_id, page, per_page):
+        # does job_id and user_id match
+        users_job = self.__crawlRepository.check_user_jobs(
+            user_id=user_id, job_id=job_id
         )
-        if not pages:
-            raise HTTPException(status_code=400, detail="Pages not found")
-        return pages
+        if not users_job:
+            raise HTTPException(
+                status_code=401,
+                detail="Invalid authentication",
+            )
+
+        # job details
+        job = self.__crawlRepository.get_job_by_id(id=job_id)
+
+        # list
+        offset = (page - 1) * per_page
+
+        items, total = self.__crawlRepository.get_pages_paginated(
+            job_id=job_id,
+            limit=per_page,
+            offset=offset,
+        )
+
+        return {
+            "domain_data": job,
+            "data": items,
+            "page": page,
+            "per_page": per_page,
+            "total": total,
+            "total_pages": (total + per_page - 1) // per_page,
+        }
 
     def get_domains(self, user_id: int, page: int, per_page: int):
         users_jobs = self.__crawlRepository.check_user_jobs(user_id=user_id)
