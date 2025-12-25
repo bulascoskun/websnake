@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import useApi from './useApi';
 
-const useGetTableData = (url: string) => {
+const useGetTableData = (url: string, filter: any) => {
   const { data, loading, error, execute } = useApi();
   const [page, setPage] = useState<number>(1);
 
@@ -12,6 +12,7 @@ const useGetTableData = (url: string) => {
       params: {
         page: page,
         per_page: 10,
+        ...filter,
       },
     });
   };

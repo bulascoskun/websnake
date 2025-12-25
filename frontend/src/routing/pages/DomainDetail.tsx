@@ -15,6 +15,10 @@ import { AddInsight } from '@/components/AddInsight';
 import type { Domain } from '@/types';
 import SkeletonCard from '@/components/ui/skeleton-card';
 import useApi from '@/hooks/useApi';
+import useGetTableData from '@/hooks/useGetTableData';
+import SkeletonTable from '@/components/ui/skeleton-table';
+import InsightsTable from '@/components/InsightsTable';
+import AppPagination from '@/components/AppPagination';
 
 const DomainDetail = () => {
   const { id } = useParams();
@@ -22,6 +26,14 @@ const DomainDetail = () => {
 
   const [domainData, setDomainData] = useState<Domain>();
   const [pageData, setPageData] = useState([]);
+
+  const {
+    data,
+    loading: insightLoading,
+    page,
+    setPage,
+    handleReset,
+  } = useGetTableData('/insight/get_list', { job_id: id });
 
   const getList = async () => {
     const { data, domain_data: domainData } = await execute({
@@ -115,11 +127,24 @@ const DomainDetail = () => {
             <CardTitle>AI Insights for {domainData?.url}</CardTitle>
 
             <CardAction>
-              <AddInsight getList={() => {}} />
+              <AddInsight getList={handleReset} />
             </CardAction>
           </CardHeader>
 
-          <CardContent></CardContent>
+          <CardContent>
+            {insightLoading ? (
+              <SkeletonTable count={10} />
+            ) : (
+              <div>
+                <InsightsTable tableData={data?.data || []} nocaption />
+                <AppPagination
+                  page={page || 0}
+                  totalPages={data?.total_pages || 0}
+                  setPage={setPage}
+                />
+              </div>
+            )}
+          </CardContent>
         </Card>
       )}
     </>

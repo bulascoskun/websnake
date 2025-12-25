@@ -24,7 +24,7 @@ const InsightsTable = ({
   return (
     <Table>
       {!nocaption && (
-        <TableCaption>A list of your recent crawlings.</TableCaption>
+        <TableCaption>A list of your recent insights.</TableCaption>
       )}
       <TableHeader>
         <TableRow>
