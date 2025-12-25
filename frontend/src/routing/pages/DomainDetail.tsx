@@ -1,100 +1,50 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-
-import type { BundledLanguage } from '@/components/ui/shadcn-io/code-block';
-import {
-  CodeBlock,
-  CodeBlockBody,
-  CodeBlockContent,
-  CodeBlockCopyButton,
-  CodeBlockFilename,
-  CodeBlockFiles,
-  CodeBlockHeader,
-  CodeBlockItem,
-  CodeBlockSelect,
-  CodeBlockSelectContent,
-  CodeBlockSelectItem,
-  CodeBlockSelectTrigger,
-  CodeBlockSelectValue,
-} from '@/components/ui/shadcn-io/code-block';
-const code = [
-  {
-    language: 'jsx',
-    filename: 'MyComponent.jsx',
-    code: `function MyComponent(props) {
-  return (
-    <div>
-      <h1>Hello, {props.name}!</h1>
-      <p>This is an example React component.</p>
-    </div>
-  );
-}`,
-  },
-  {
-    language: 'tsx',
-    filename: 'MyComponent.tsx',
-    code: `function MyComponent(props: { name: string }) {
-  return (
-    <div>
-      <h1>Hello, {props.name}!</h1>
-      <p>This is an example React component.</p>
-    </div>
-  );
-}`,
-  },
-];
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router';
+import useApi from '@/hooks/useApi';
 
 const DomainDetail = () => {
+  const { id } = useParams();
+  const { loading, error, execute } = useApi();
+
+  const [pageData, setPageData] = useState([]);
+
+  const getList = async () => {
+    const { data } = await execute({
+      method: 'GET',
+      url: 'crawler/get_list',
+      params: {
+        page: 1,
+        per_page: 10,
+        input_job_id: id,
+      },
+    });
+
+    const urlArr = data.map((domain: { url: string }) => domain.url);
+    setPageData(urlArr);
+  };
+
+  useEffect(() => {
+    getList();
+  }, []);
+
   return (
     <Card>
       <CardHeader>
         <CardTitle></CardTitle>
       </CardHeader>
       <CardContent>
-        <CodeBlock data={code} defaultValue={code[0].language}>
-          <CodeBlockHeader>
-            <CodeBlockFiles>
-              {(item) => (
-                <CodeBlockFilename key={item.language} value={item.language}>
-                  {item.filename}
-                </CodeBlockFilename>
-              )}
-            </CodeBlockFiles>
-            <CodeBlockSelect>
-              <CodeBlockSelectTrigger>
-                <CodeBlockSelectValue />
-              </CodeBlockSelectTrigger>
-              <CodeBlockSelectContent>
-                {(item) => (
-                  <CodeBlockSelectItem
-                    key={item.language}
-                    value={item.language}
-                  >
-                    {item.language}
-                  </CodeBlockSelectItem>
-                )}
-              </CodeBlockSelectContent>
-            </CodeBlockSelect>
-            <CodeBlockCopyButton
-              onCopy={() => console.log('Copied code to clipboard')}
-              onError={() => console.error('Failed to copy code to clipboard')}
-            />
-          </CodeBlockHeader>
-          <CodeBlockBody>
-            {(item) => (
-              <CodeBlockItem key={item.language} value={item.language}>
-                <CodeBlockContent
-                  language={item.language as BundledLanguage}
-                  themes={{
-                    light: 'vitesse-light',
-                    dark: 'vitesse-dark',
-                  }}
-                >
-                  {item.code}
-                </CodeBlockContent>
-              </CodeBlockItem>
-            )}
-          </CodeBlockBody>
-        </CodeBlock>
+        <div className="border rounded-lg p-4 flex gap-1 flex-col bg-neutral-800">
+          {pageData.slice(0, 10).map((item, index) => (
+            <code key={index} className="text-sm text-white flex gap-2">
+              <span className="w-5">{index + 1}</span>
+              <span>{item}</span>
+            </code>
+          ))}
+          <code className="text-sm text-white flex gap-2">
+            <span>...</span>
+          </code>
+        </div>
       </CardContent>
     </Card>
   );
