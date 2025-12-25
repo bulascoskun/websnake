@@ -61,12 +61,14 @@ const DomainDetail = () => {
         <div className="border rounded-lg p-4 flex gap-1 flex-col bg-neutral-800">
           {pageData.slice(0, 10).map((item, index) => (
             <code key={index} className="text-sm text-white flex gap-2">
-              <span className="w-5">{index + 1}</span>
-              <span>{item}</span>
+              <div className="w-5">{index + 1}</div>
+              <div className="w-full truncate" title={item}>
+                {item}
+              </div>
             </code>
           ))}
           <code className="text-sm text-white flex gap-2">
-            <span>...</span>
+            <div>...</div>
           </code>
         </div>
       </CardContent>
