@@ -1,9 +1,11 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+from decouple import config
+from typing import cast
 # import os
 
-SQLALCHEMY_DATABASE_URL = "postgresql+psycopg2://user:password@localhost:5432/websnake"  # normally from .env file
+SQLALCHEMY_DATABASE_URL = cast(str, config("SQLALCHEMY_DATABASE_URL"))
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 
