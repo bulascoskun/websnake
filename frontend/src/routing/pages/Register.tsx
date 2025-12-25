@@ -65,12 +65,6 @@ const Register = () => {
   });
 
   const onSubmit = async (payload: z.infer<typeof formSchema>) => {
-    // {
-    //   "first_name": "string",
-    //   "last_name": "string",
-    //   "email": "user@example.com",
-    //   "password": "string"
-    // }
     try {
       await api.post('/auth/register', payload);
       toast.success('You have successfully created an account. Please log in.');

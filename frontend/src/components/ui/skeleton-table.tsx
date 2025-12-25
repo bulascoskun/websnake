@@ -14,16 +14,16 @@ export default function SkeletonTable({ count }: { count?: number }) {
       <TableHeader>
         <TableRow>
           <TableHead>
-            <Skeleton className="h-5 w-full" />
+            <Skeleton className="h-8 w-full" />
           </TableHead>
           <TableHead>
-            <Skeleton className="h-5 w-full" />
+            <Skeleton className="h-8 w-full" />
           </TableHead>
           <TableHead>
-            <Skeleton className="h-5 w-full" />
+            <Skeleton className="h-8 w-full" />
           </TableHead>
           <TableHead>
-            <Skeleton className="h-5 w-full" />
+            <Skeleton className="h-8 w-full" />
           </TableHead>
         </TableRow>
       </TableHeader>
@@ -31,16 +31,16 @@ export default function SkeletonTable({ count }: { count?: number }) {
         {[...Array(count || 5)].map((_, i) => (
           <TableRow key={i}>
             <TableCell>
-              <Skeleton className="h-5 w-full" />
+              <Skeleton className="h-8 w-full" />
             </TableCell>
             <TableCell>
-              <Skeleton className="h-5 w-full" />
+              <Skeleton className="h-8 w-full" />
             </TableCell>
             <TableCell>
-              <Skeleton className="h-5 w-full" />
+              <Skeleton className="h-8 w-full" />
             </TableCell>
             <TableCell>
-              <Skeleton className="h-5 w-full" />
+              <Skeleton className="h-8 w-full" />
             </TableCell>
           </TableRow>
         ))}

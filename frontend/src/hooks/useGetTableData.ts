@@ -16,6 +16,14 @@ const useGetTableData = (url: string) => {
     });
   };
 
+  const handleReset = () => {
+    if (page === 1) {
+      getList();
+    } else {
+      setPage(1);
+    }
+  };
+
   useEffect(() => {
     getList();
   }, [page]);
@@ -26,6 +34,7 @@ const useGetTableData = (url: string) => {
     error,
     page,
     setPage,
+    handleReset,
   };
 };
 

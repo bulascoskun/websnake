@@ -1,6 +1,6 @@
+import { AddDomain } from '@/components/AddDomain';
 import AppPagination from '@/components/AppPagination';
 import DomainsTable from '@/components/DomainsTable';
-import { Button } from '@/components/ui/button';
 import {
   Card,
   CardAction,
@@ -9,18 +9,16 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { RefreshCcw } from 'lucide-react';
 
 import SkeletonTable from '@/components/ui/skeleton-table';
 import useGetTableData from '@/hooks/useGetTableData';
 
 const Domains = () => {
-  const {
-    data,
-    loading,
-    error: _,
-    page,
-    setPage,
-  } = useGetTableData('/crawler/get_domains');
+  const { data, loading, page, setPage, handleReset } = useGetTableData(
+    '/crawler/get_domains'
+  );
 
   return (
     <Card>
@@ -31,7 +29,18 @@ const Domains = () => {
           using the button on the side.
         </CardDescription>
         <CardAction>
-          <Button>Add Domain</Button>
+          <div className="flex gap-2">
+            <Button
+              onClick={handleReset}
+              variant="outline"
+              size="icon"
+              aria-label="Refresh"
+              disabled={loading}
+            >
+              <RefreshCcw />
+            </Button>
+            <AddDomain getList={handleReset} />
+          </div>
         </CardAction>
       </CardHeader>
 
