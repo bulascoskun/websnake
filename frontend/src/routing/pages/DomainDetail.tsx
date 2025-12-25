@@ -12,9 +12,9 @@ import { capitalizeFirstLetter } from '@/utils/helpers';
 import { getStatusColors } from '@/lib/utils';
 import { AlertCircleIcon } from 'lucide-react';
 import { AddInsight } from '@/components/AddInsight';
+import type { Domain } from '@/types';
 import SkeletonCard from '@/components/ui/skeleton-card';
 import useApi from '@/hooks/useApi';
-import type { Domain } from '@/types';
 
 const DomainDetail = () => {
   const { id } = useParams();

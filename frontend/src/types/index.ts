@@ -15,3 +15,13 @@ export interface CrawlPageData {
   description: string;
   body_preview: string;
 }
+
+export interface Insight {
+  id: number;
+  user_id: number;
+  job_id: number;
+  found: boolean;
+  answer: string;
+  created_at: string;
+  source_hint: string;
+}

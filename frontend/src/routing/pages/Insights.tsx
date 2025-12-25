@@ -1,3 +1,5 @@
+import AppPagination from '@/components/AppPagination';
+import InsightsTable from '@/components/InsightsTable';
 import {
   Card,
   CardContent,
@@ -5,24 +7,12 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { useEffect } from 'react';
-import useApi from '@/hooks/useApi';
+import SkeletonTable from '@/components/ui/skeleton-table';
+import useGetTableData from '@/hooks/useGetTableData';
 
 const Home = () => {
-  const { data, loading: loading, error: _err, execute } = useApi();
-  const getList = async () => {
-    await execute({
-      method: 'GET',
-      url: '/crawler/get_domains',
-      params: {
-        page: 1,
-        per_page: 5,
-      },
-    });
-  };
-  useEffect(() => {
-    getList();
-  }, []);
+  const { data, loading, page, setPage, handleReset } =
+    useGetTableData('/insight/get_list');
 
   return (
     <Card>
@@ -32,7 +22,18 @@ const Home = () => {
       </CardHeader>
 
       <CardContent>
-        <p>TODO:</p>
+        {loading ? (
+          <SkeletonTable count={10} />
+        ) : (
+          <div>
+            <InsightsTable tableData={data?.data || []} nocaption />
+            <AppPagination
+              page={page || 0}
+              totalPages={data?.total_pages || 0}
+              setPage={setPage}
+            />
+          </div>
+        )}
       </CardContent>
     </Card>
   );

@@ -8,6 +8,7 @@ import {
   Account,
   DomainDetail,
   Insights,
+  InsightsDetail,
 } from './pages';
 import { AuthLayout, DashboardLayout } from './layouts';
 import ProtectedRoute from '@/components/ProtectedRoute';
@@ -27,6 +28,7 @@ export default createBrowserRouter([
           },
           { path: 'domains/:id', Component: DomainDetail },
           { path: 'insights', Component: Insights },
+          { path: 'insights/:id', Component: InsightsDetail },
           { path: 'account', Component: Account },
         ],
       },
