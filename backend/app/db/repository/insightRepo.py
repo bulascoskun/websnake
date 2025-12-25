@@ -34,3 +34,7 @@ class InsightRepository(BaseRepository):
         items = query.order_by(Insight.id.desc()).limit(limit).offset(offset).all()
 
         return items, total
+
+    def get_insight_by_id(self, insight_id: int):
+        query = self.session.query(Insight).filter(Insight.id == insight_id).first()
+        return query

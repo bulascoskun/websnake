@@ -102,3 +102,16 @@ class InsightService:
             "total": total,
             "total_pages": (total + per_page - 1) // per_page,
         }
+
+    def get_by_id(self, insight_id, user_id):
+        found_insight = self.__insightRepository.get_insight_by_id(insight_id)
+        if not found_insight:
+            raise HTTPException(status_code=400, detail="Insight not found")
+
+        if not found_insight.user_id == user_id:
+            raise HTTPException(
+                status_code=401,
+                detail="Invalid authentication",
+            )
+
+        return found_insight

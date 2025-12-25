@@ -41,3 +41,19 @@ def get_list(
     except Exception as error:
         print(error)
         raise error
+
+
+@insightRouter.get("/get_by_id", status_code=200)
+def get_by_id(
+    insight_id: int,
+    session: Session = Depends(get_db),
+    user: UserOutput = Depends(get_current_user),
+):
+    try:
+        return InsightService(session=session).get_by_id(
+            insight_id=insight_id,
+            user_id=user.id,
+        )
+    except Exception as error:
+        print(error)
+        raise error
