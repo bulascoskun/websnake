@@ -47,7 +47,7 @@ class InsightService:
         {{
         "found": true | false,
         "answer": "string",
-        "source_hint": "short description of where the answer was found"
+        "source_hint": "where the answer was found including the link inside paranthesis"
         }}
         """
 
