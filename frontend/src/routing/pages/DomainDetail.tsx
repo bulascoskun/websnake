@@ -19,6 +19,7 @@ import useGetTableData from '@/hooks/useGetTableData';
 import SkeletonTable from '@/components/ui/skeleton-table';
 import InsightsTable from '@/components/InsightsTable';
 import AppPagination from '@/components/AppPagination';
+import CustomEmpty from '@/components/CustomEmpty';
 
 const DomainDetail = () => {
   const { id } = useParams();
@@ -134,15 +135,20 @@ const DomainDetail = () => {
           <CardContent>
             {insightLoading ? (
               <SkeletonTable count={10} />
-            ) : (
+            ) : data?.data?.length > 0 ? (
               <div>
-                <InsightsTable tableData={data?.data || []} nocaption />
+                <InsightsTable tableData={data.data} nocaption />
                 <AppPagination
                   page={page || 0}
                   totalPages={data?.total_pages || 0}
                   setPage={setPage}
                 />
               </div>
+            ) : (
+              <CustomEmpty
+                title="No insights were found"
+                description="You can add Insight and access it from here."
+              />
             )}
           </CardContent>
         </Card>
