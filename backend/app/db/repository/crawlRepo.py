@@ -47,7 +47,7 @@ class CrawlRepository(BaseRepository):
     def get_job_by_domain_name(self, domain_name: str):
         return self.session.query(CrawlJob).filter(CrawlJob.url == domain_name).first()
 
-    def get_job_by_id(self, id: str):
+    def get_job_by_id(self, id: int) -> CrawlJob:
         return self.session.query(CrawlJob).filter(CrawlJob.id == id).first()
 
     def create_user_job_relation(self, user_id: int, job_id: int):

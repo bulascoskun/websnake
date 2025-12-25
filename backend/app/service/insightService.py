@@ -69,6 +69,7 @@ class InsightService:
             found=parsed["found"],
             answer=parsed["answer"],
             source_hint=parsed["source_hint"],
+            input=input,
         )
 
         return created_insight.id
@@ -114,4 +115,9 @@ class InsightService:
                 detail="Invalid authentication",
             )
 
-        return found_insight
+        job = self.__crawlRepository.get_job_by_id(id=found_insight.job_id)
+
+        return {
+            "url": job.url,
+            "found_insight": found_insight,
+        }

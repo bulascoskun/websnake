@@ -4,7 +4,9 @@ from sqlalchemy import func
 
 
 class InsightRepository(BaseRepository):
-    def create_insight(self, user_id, job_id, found, answer, source_hint) -> Insight:
+    def create_insight(
+        self, user_id, job_id, found, answer, source_hint, input
+    ) -> Insight:
         job = Insight()
         job = Insight(
             user_id=user_id,
@@ -12,6 +14,7 @@ class InsightRepository(BaseRepository):
             found=found,
             answer=answer,
             source_hint=source_hint,
+            input=input,
         )
         self.session.add(job)
         self.session.commit()

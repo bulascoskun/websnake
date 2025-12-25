@@ -11,8 +11,7 @@ import SkeletonTable from '@/components/ui/skeleton-table';
 import useGetTableData from '@/hooks/useGetTableData';
 
 const Home = () => {
-  const { data, loading, page, setPage, handleReset } =
-    useGetTableData('/insight/get_list');
+  const { data, loading, page, setPage } = useGetTableData('/insight/get_list');
 
   return (
     <Card>
