@@ -17,12 +17,7 @@ import { ArrowRightIcon } from 'lucide-react';
 import { Button } from './ui/button';
 import { Link } from 'react-router';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
-
-const statusColors: any = {
-  failed: 'bg-red-500',
-  completed: 'bg-green-600',
-  processing: 'bg-orange-400',
-};
+import { getStatusColors } from '@/lib/utils';
 
 const DomainsTable = ({
   tableData,
@@ -51,7 +46,7 @@ const DomainsTable = ({
               <div className="flex gap-2 items-center">
                 <div
                   className={`size-4 rounded-full ${
-                    domain.status && statusColors[domain.status]
+                    domain.status && getStatusColors(domain.status)
                   }`}
                 ></div>
                 <div className="text-xs">
