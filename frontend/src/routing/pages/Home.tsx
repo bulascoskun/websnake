@@ -20,7 +20,6 @@ import SkeletonTable from '@/components/ui/skeleton-table';
 
 const Home = () => {
   const { data, loading: loading, error: _err, execute } = useApi();
-
   const getList = async () => {
     await execute({
       method: 'GET',
@@ -31,7 +30,6 @@ const Home = () => {
       },
     });
   };
-
   useEffect(() => {
     getList();
   }, []);
@@ -55,7 +53,7 @@ const Home = () => {
         <Card className="col-span-4">
           <CardHeader>
             <CardTitle>Total Domains</CardTitle>
-            <CardDescription> TODO: </CardDescription>
+            <CardDescription> {data?.total || ''} </CardDescription>
           </CardHeader>
         </Card>
 
