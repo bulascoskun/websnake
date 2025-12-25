@@ -1,9 +1,0 @@
-.\venv\Scripts\Activate.ps1
-fastapi dev main.py
-
---------------
-RESET DB:
-docker exec -it postgres-db psql -U user -d postgres -c "DROP DATABASE IF EXISTS websnake;"
-docker exec -it postgres-db psql -U user -d postgres -c "CREATE DATABASE websnake;"
---------------
-
