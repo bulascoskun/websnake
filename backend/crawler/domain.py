@@ -1,10 +1,13 @@
 from urllib.parse import urlparse
+import tldextract
 
 
 def get_domain_name(url):
     try:
-        results = get_sub_domain_name(url).split(".")
-        return results[-2] + "." + results[-1]
+        ext = tldextract.extract(url)
+        if ext.domain and ext.suffix:
+            return f"{ext.domain}.{ext.suffix}"
+        return ""
     except Exception:
         return ""
 

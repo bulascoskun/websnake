@@ -52,21 +52,21 @@ const Home = () => {
       <div className="mt-4 lg:mt-6 grid grid-cols-12 gap-4 lg:gap-6">
         <Card className="col-span-4">
           <CardHeader>
-            <CardTitle>Total Domains</CardTitle>
+            <CardTitle>Domains</CardTitle>
             <CardDescription> {data?.total || ''} </CardDescription>
           </CardHeader>
         </Card>
 
         <Card className="col-span-4">
           <CardHeader>
-            <CardTitle>Last crawl</CardTitle>
+            <CardTitle>AI Insights</CardTitle>
             <CardDescription> TODO: </CardDescription>
           </CardHeader>
         </Card>
 
         <Card className="col-span-4">
           <CardHeader>
-            <CardTitle>Avg confidence</CardTitle>
+            <CardTitle>Last Crawl</CardTitle>
             <CardDescription> TODO: </CardDescription>
           </CardHeader>
         </Card>

@@ -25,8 +25,8 @@ const Domains = () => {
       <CardHeader>
         <CardTitle>Domains</CardTitle>
         <CardDescription>
-          Here you can view the domains you've crawled, or add domains to crawl
-          using the button on the side.
+          You can view the domains you've crawled, or add domains to crawl using
+          the button on the side.
         </CardDescription>
         <CardAction>
           <div className="flex gap-2">

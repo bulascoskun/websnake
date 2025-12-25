@@ -4,5 +4,6 @@ import Login from './Login';
 import Register from './Register';
 import Account from './Account';
 import DomainDetail from './DomainDetail.tsx';
+import Insights from './Insights.tsx';
 
-export { Login, Register, Domains, Home, Account, DomainDetail };
+export { Login, Register, Domains, Home, Account, DomainDetail, Insights };

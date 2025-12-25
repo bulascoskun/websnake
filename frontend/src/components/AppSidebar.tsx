@@ -27,7 +27,7 @@ const items = [
     icon: List,
   },
   {
-    title: 'Insights',
+    title: 'AI Insights',
     url: '/insights',
     icon: Brain,
   },
