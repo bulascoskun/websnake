@@ -1,8 +1,13 @@
 from app.db.repository.insightRepo import InsightRepository
 from app.service.crawlService import CrawlService
 from sqlalchemy.orm import Session
-
+from openai import OpenAI
 from app.util.helpers import model_to_dict
+from decouple import config
+from typing import cast
+import json
+
+OPENAI_API_KEY = cast(str, config("OPENAI_API_KEY"))
 
 
 class InsightService:
@@ -43,4 +48,24 @@ class InsightService:
         }}
         """
 
-        return prompt
+        client = OpenAI(api_key=OPENAI_API_KEY)
+
+        response = client.responses.create(
+            model="gpt-5-nano",
+            input=prompt,
+            store=True,
+        )
+
+        raw_text = response.output_text
+        parsed = json.loads(raw_text)
+
+        # save response to db
+        created_insight = self.__insightRepository.create_insight(
+            user_id=user.id,
+            job_id=int(job_id),
+            found=parsed["found"],
+            answer=parsed["answer"],
+            source_hint=parsed["source_hint"],
+        )
+
+        return created_insight.id
