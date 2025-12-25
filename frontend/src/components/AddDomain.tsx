@@ -21,7 +21,7 @@ import * as z from 'zod';
 const formSchema = z.object({
   url: z
     .url('This is not a valid url.')
-    .max(256, 'E-mail must be at most 256 characters.'),
+    .max(256, 'URL must be at most 256 characters.'),
 });
 
 export function AddDomain({ getList }: { getList: () => void }) {

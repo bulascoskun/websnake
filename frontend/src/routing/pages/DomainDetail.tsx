@@ -8,7 +8,7 @@ import {
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import useApi from '@/hooks/useApi';
-import type { Domain } from '@/types';
+import type { CrawlPageData, Domain } from '@/types';
 import { getStatusColors } from '@/lib/utils';
 import { capitalizeFirstLetter } from '@/utils/helpers';
 import SkeletonCard from '@/components/ui/skeleton-card';
@@ -22,6 +22,7 @@ const DomainDetail = () => {
 
   const [domainData, setDomainData] = useState<Domain>();
   const [pageData, setPageData] = useState([]);
+  const [crawlData, setCrawlData] = useState<CrawlPageData[] | []>([]);
 
   const getList = async () => {
     const { data, domain_data: domainData } = await execute({
@@ -36,6 +37,7 @@ const DomainDetail = () => {
 
     const urlArr = data.map((domain: { url: string }) => domain.url);
 
+    setCrawlData(data);
     setPageData(urlArr);
     setDomainData(domainData);
   };
@@ -109,17 +111,19 @@ const DomainDetail = () => {
         </CardContent>
       </Card>
 
-      <Card className="mt-4 lg:mt-6">
-        <CardHeader>
-          <CardTitle>AI insights for {domainData?.url}</CardTitle>
+      {domainData?.status === 'completed' && (
+        <Card className="mt-4 lg:mt-6">
+          <CardHeader>
+            <CardTitle>AI insights for {domainData?.url}</CardTitle>
 
-          <CardAction>
-            <AddInsight getList={() => {}} />
-          </CardAction>
-        </CardHeader>
+            <CardAction>
+              <AddInsight getList={() => {}} crawlData={crawlData} />
+            </CardAction>
+          </CardHeader>
 
-        <CardContent></CardContent>
-      </Card>
+          <CardContent></CardContent>
+        </Card>
+      )}
     </>
   );
 };
