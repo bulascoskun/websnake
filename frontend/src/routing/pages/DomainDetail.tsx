@@ -6,6 +6,8 @@ import type { Domain } from '@/types';
 import { getStatusColors } from '@/lib/utils';
 import { capitalizeFirstLetter } from '@/utils/helpers';
 import SkeletonCard from '@/components/ui/skeleton-card';
+import { AlertCircleIcon } from 'lucide-react';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 const DomainDetail = () => {
   const { id } = useParams();
@@ -15,7 +17,7 @@ const DomainDetail = () => {
   const [pageData, setPageData] = useState([]);
 
   const getList = async () => {
-    const { data, domain_data } = await execute({
+    const { data, domain_data: domainData } = await execute({
       method: 'GET',
       url: 'crawler/get_list',
       params: {
@@ -28,7 +30,7 @@ const DomainDetail = () => {
     const urlArr = data.map((domain: { url: string }) => domain.url);
 
     setPageData(urlArr);
-    setDomainData(domain_data);
+    setDomainData(domainData);
   };
 
   useEffect(() => {
@@ -58,19 +60,44 @@ const DomainDetail = () => {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="border rounded-lg p-4 flex gap-1 flex-col bg-neutral-800">
-          {pageData.slice(0, 10).map((item, index) => (
-            <code key={index} className="text-sm text-white flex gap-2">
-              <div className="w-5">{index + 1}</div>
-              <div className="w-full truncate" title={item}>
-                {item}
-              </div>
+        {domainData?.status === 'completed' && (
+          <div className="border rounded-lg p-4 flex gap-1 flex-col bg-neutral-800">
+            {pageData.slice(0, 10).map((item, index) => (
+              <code key={index} className="text-sm text-white flex gap-2">
+                <div className="w-5">{index + 1}</div>
+                <div className="w-full truncate" title={item}>
+                  {item}
+                </div>
+              </code>
+            ))}
+            <code className="text-sm text-white flex gap-2">
+              <div>...</div>
             </code>
-          ))}
-          <code className="text-sm text-white flex gap-2">
-            <div>...</div>
-          </code>
-        </div>
+          </div>
+        )}
+
+        {domainData?.status === 'failed' && (
+          <Alert variant="destructive">
+            <AlertCircleIcon />
+            <AlertTitle>Unable to crawl {domainData?.url}.</AlertTitle>
+            <AlertDescription>
+              <p>
+                We are unable crawl {domainData?.url} it because the site
+                doesn't allow it.
+              </p>
+            </AlertDescription>
+          </Alert>
+        )}
+
+        {domainData?.status === 'processing' && (
+          <Alert className="text-orange-800">
+            <AlertCircleIcon />
+            <AlertTitle>Processing...</AlertTitle>
+            <AlertDescription className="text-orange-800">
+              <p>We are currently crawling {domainData?.url} please wait.</p>
+            </AlertDescription>
+          </Alert>
+        )}
       </CardContent>
     </Card>
   );
