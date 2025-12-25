@@ -9,14 +9,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
 import { Field, FieldError } from '@/components/ui/field';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import useApi from '@/hooks/useApi';
 import * as z from 'zod';
-import type { CrawlPageData } from '@/types';
 import { Textarea } from './ui/textarea';
 import { useParams } from 'react-router';
 
@@ -33,17 +31,21 @@ export function AddInsight({ getList }: { getList: () => void }) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      input: '',
+      input: 'What do you think about this website?',
     },
   });
 
   const onSubmit = async (payload: z.infer<typeof formSchema>) => {
+    const params = {
+      input: payload.input,
+      job_id: id,
+    };
     try {
-      // await execute({
-      //   method: 'POST',
-      //   url: '/crawler/crawl',
-      //   params: payload,
-      // });
+      await execute({
+        method: 'POST',
+        url: '/insight/create_insight',
+        params,
+      });
       setOpen(false);
       getList();
     } catch (error) {

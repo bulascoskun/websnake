@@ -9,7 +9,7 @@ from app.db.schema.user import UserOutput
 insightRouter = APIRouter()
 
 
-@insightRouter.post("/create-insight", status_code=201)
+@insightRouter.post("/create_insight", status_code=201)
 def create_insight(
     input: str,
     job_id: int,

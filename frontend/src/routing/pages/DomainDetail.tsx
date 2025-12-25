@@ -8,7 +8,7 @@ import {
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import useApi from '@/hooks/useApi';
-import type { CrawlPageData, Domain } from '@/types';
+import type { Domain } from '@/types';
 import { getStatusColors } from '@/lib/utils';
 import { capitalizeFirstLetter } from '@/utils/helpers';
 import SkeletonCard from '@/components/ui/skeleton-card';
