@@ -3,8 +3,10 @@ from fastapi.openapi.utils import get_openapi
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from app.util.init_db import create_tables
+
 from app.routers.auth import authRouter
 from app.routers.crawler import crawlerRouter
+from app.routers.insight import insightRouter
 
 
 @asynccontextmanager
@@ -45,8 +47,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Auth Router
 app.include_router(router=authRouter, tags=["auth"], prefix="/auth")
 
-# Crawler Router
 app.include_router(router=crawlerRouter, tags=["crawler"], prefix="/crawler")
+
+app.include_router(router=insightRouter, tags=["insight"], prefix="/insight")
