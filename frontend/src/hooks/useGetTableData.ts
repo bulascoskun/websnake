@@ -1,0 +1,32 @@
+import { useEffect, useState } from 'react';
+import useApi from './useApi';
+
+const useGetTableData = (url: string) => {
+  const { data, loading, error, execute } = useApi();
+  const [page, setPage] = useState<number>(1);
+
+  const getList = async () => {
+    await execute({
+      method: 'GET',
+      url: url,
+      params: {
+        page: page,
+        per_page: 10,
+      },
+    });
+  };
+
+  useEffect(() => {
+    getList();
+  }, [page]);
+
+  return {
+    data,
+    loading,
+    error,
+    page,
+    setPage,
+  };
+};
+
+export default useGetTableData;

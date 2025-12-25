@@ -11,27 +11,16 @@ import {
 } from '@/components/ui/card';
 
 import SkeletonTable from '@/components/ui/skeleton-table';
-import useApi from '@/hooks/useApi';
-import { useEffect, useState } from 'react';
+import useGetTableData from '@/hooks/useGetTableData';
 
 const Domains = () => {
-  const { data, loading: loading, error: _err, execute } = useApi();
-  const [page, setPage] = useState<number>(1);
-
-  const getList = async () => {
-    await execute({
-      method: 'GET',
-      url: '/crawler/get_domains',
-      params: {
-        page: page,
-        per_page: 10,
-      },
-    });
-  };
-
-  useEffect(() => {
-    getList();
-  }, [page]);
+  const {
+    data,
+    loading,
+    error: _,
+    page,
+    setPage,
+  } = useGetTableData('/crawler/get_domains');
 
   return (
     <Card>
@@ -53,7 +42,7 @@ const Domains = () => {
           <div>
             <DomainsTable tableData={data?.data || []} nocaption />
             <AppPagination
-              page={data?.page || 0}
+              page={page || 0}
               totalPages={data?.total_pages || 0}
               setPage={setPage}
             />
