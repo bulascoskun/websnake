@@ -4,7 +4,6 @@ from app.core.database import get_db
 from app.service.insightService import InsightService
 from app.util.protectRoute import get_current_user
 from app.db.schema.user import UserOutput
-from typing import Optional
 
 
 insightRouter = APIRouter()
