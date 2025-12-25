@@ -29,8 +29,8 @@ const InsightsTable = ({
       <TableHeader>
         <TableRow>
           <TableHead>Date</TableHead>
-          <TableHead>Source Hint</TableHead>
-          <TableHead></TableHead>
+          <TableHead>URL</TableHead>
+          <TableHead>Question</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -40,9 +40,9 @@ const InsightsTable = ({
               {formatDateAndHour(insight.created_at)}
             </TableCell>
 
-            <TableCell className="font-medium truncate max-w-60">
-              {insight.source_hint}
-            </TableCell>
+            <TableCell className="font-medium">{insight.url}</TableCell>
+
+            <TableCell className="truncate max-w-60">{insight.input}</TableCell>
 
             <TableCell className="text-right">
               <Tooltip>

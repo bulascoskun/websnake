@@ -24,4 +24,6 @@ export interface Insight {
   answer: string;
   created_at: string;
   source_hint: string;
+  url?: string;
+  input?: string;
 }

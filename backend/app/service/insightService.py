@@ -96,6 +96,10 @@ class InsightService:
             offset=offset,
         )
 
+        for item in items:
+            job = self.__crawlRepository.get_job_by_id(id=item.job_id)
+            item.url = job.url
+
         return {
             "data": items,
             "page": page,
