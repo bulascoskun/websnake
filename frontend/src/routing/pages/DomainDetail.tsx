@@ -7,14 +7,14 @@ import {
 } from '@/components/ui/card';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { capitalizeFirstLetter } from '@/utils/helpers';
+import { getStatusColors } from '@/lib/utils';
+import { AlertCircleIcon } from 'lucide-react';
+import { AddInsight } from '@/components/AddInsight';
+import SkeletonCard from '@/components/ui/skeleton-card';
 import useApi from '@/hooks/useApi';
 import type { Domain } from '@/types';
-import { getStatusColors } from '@/lib/utils';
-import { capitalizeFirstLetter } from '@/utils/helpers';
-import SkeletonCard from '@/components/ui/skeleton-card';
-import { AlertCircleIcon } from 'lucide-react';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { AddInsight } from '@/components/AddInsight';
 
 const DomainDetail = () => {
   const { id } = useParams();
@@ -112,7 +112,7 @@ const DomainDetail = () => {
       {domainData?.status === 'completed' && (
         <Card className="mt-4 lg:mt-6">
           <CardHeader>
-            <CardTitle>AI insights for {domainData?.url}</CardTitle>
+            <CardTitle>AI Insights for {domainData?.url}</CardTitle>
 
             <CardAction>
               <AddInsight getList={() => {}} />

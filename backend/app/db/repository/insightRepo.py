@@ -1,5 +1,6 @@
 from app.db.models.insight import Insight
 from .base import BaseRepository
+from sqlalchemy import func
 
 
 class InsightRepository(BaseRepository):
@@ -16,3 +17,20 @@ class InsightRepository(BaseRepository):
         self.session.commit()
         self.session.refresh(job)
         return job
+
+    def get_insights_paginated(
+        self,
+        user_id,
+        job_id,
+        limit: int,
+        offset: int,
+    ):
+        query = self.session.query(Insight).filter(Insight.user_id == user_id)
+        if job_id is not None:
+            query = query.filter(Insight.job_id == job_id)
+
+        total = query.with_entities(func.count()).scalar()
+
+        items = query.order_by(Insight.id.desc()).limit(limit).offset(offset).all()
+
+        return items, total
