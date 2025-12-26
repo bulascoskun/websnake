@@ -27,3 +27,11 @@ export interface Insight {
   url?: string;
   input?: string;
 }
+
+export interface RecentDomains {
+  data: Domain[];
+  page: number;
+  per_page: number;
+  total: number;
+  total_pages: number;
+}

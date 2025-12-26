@@ -7,6 +7,7 @@ from app.util.init_db import create_tables
 from app.routers.auth import authRouter
 from app.routers.crawler import crawlerRouter
 from app.routers.insight import insightRouter
+from app.routers.home import homeRouter
 
 
 @asynccontextmanager
@@ -52,3 +53,5 @@ app.include_router(router=authRouter, tags=["auth"], prefix="/auth")
 app.include_router(router=crawlerRouter, tags=["crawler"], prefix="/crawler")
 
 app.include_router(router=insightRouter, tags=["insight"], prefix="/insight")
+
+app.include_router(router=homeRouter, tags=["home"], prefix="/home")

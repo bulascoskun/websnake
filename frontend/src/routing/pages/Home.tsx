@@ -14,14 +14,25 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import useApi from '@/hooks/useApi';
 import SkeletonTable from '@/components/ui/skeleton-table';
+import type { RecentDomains } from '@/types';
 
 const Home = () => {
-  const { data, loading: loading, error: _err, execute } = useApi();
+  const { loading: loading, error: _err, execute } = useApi();
+
+  const [data, setData] = useState<RecentDomains | null>(null);
+
+  const initPage = async () => {
+    const data = await execute({
+      method: 'GET',
+      url: '/home/get_stats',
+    });
+    setData(data);
+  };
   const getList = async () => {
-    await execute({
+    const data = await execute({
       method: 'GET',
       url: '/crawler/get_domains',
       params: {
@@ -29,8 +40,11 @@ const Home = () => {
         per_page: 5,
       },
     });
+    setData(data);
   };
+
   useEffect(() => {
+    initPage();
     getList();
   }, []);
 
@@ -53,7 +67,7 @@ const Home = () => {
         <Card className="col-span-4">
           <CardHeader>
             <CardTitle>Domains</CardTitle>
-            <CardDescription> {data?.total || ''} </CardDescription>
+            <CardDescription> {data?.total || 0} </CardDescription>
           </CardHeader>
         </Card>
 
