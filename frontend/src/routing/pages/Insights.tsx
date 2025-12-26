@@ -24,14 +24,14 @@ const Home = () => {
         {loading ? (
           <SkeletonTable count={10} />
         ) : (
-          <div>
+          <>
             <InsightsTable tableData={data?.data || []} nocaption />
             <AppPagination
               page={page || 0}
               totalPages={data?.total_pages || 0}
               setPage={setPage}
             />
-          </div>
+          </>
         )}
       </CardContent>
     </Card>

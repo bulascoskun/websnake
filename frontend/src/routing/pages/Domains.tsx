@@ -24,7 +24,7 @@ const Domains = () => {
     <Card>
       <CardHeader>
         <CardTitle>Domains</CardTitle>
-        <CardDescription>
+        <CardDescription className="hidden md:block">
           You can view the domains you've crawled, or add domains to crawl using
           the button on the side.
         </CardDescription>
@@ -48,14 +48,14 @@ const Domains = () => {
         {loading ? (
           <SkeletonTable count={10} />
         ) : (
-          <div>
+          <>
             <DomainsTable tableData={data?.data || []} nocaption />
             <AppPagination
               page={page || 0}
               totalPages={data?.total_pages || 0}
               setPage={setPage}
             />
-          </div>
+          </>
         )}
       </CardContent>
     </Card>

@@ -146,11 +146,11 @@ const Account = () => {
           </div>
         </form>
 
-        <CardAction>
+        <div className="flex justify-end">
           <Button type="submit" form="form-login" loading={loading}>
             Save
           </Button>
-        </CardAction>
+        </div>
       </CardContent>
     </Card>
   );
