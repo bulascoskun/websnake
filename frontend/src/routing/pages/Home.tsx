@@ -8,7 +8,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { RefreshCcw } from 'lucide-react';
+import { RefreshCcw, Globe, Brain, Clock } from 'lucide-react';
 import {
   Tooltip,
   TooltipContent,
@@ -18,18 +18,26 @@ import { useEffect, useState } from 'react';
 import useApi from '@/hooks/useApi';
 import SkeletonTable from '@/components/ui/skeleton-table';
 import type { RecentDomains } from '@/types';
+import { formatDateAndHour } from '@/utils/helpers';
 
 const Home = () => {
   const { loading: loading, error: _err, execute } = useApi();
 
   const [data, setData] = useState<RecentDomains | null>(null);
+  const [pageData, setPageData] = useState<{
+    total_insights: string;
+    last_crawl: string;
+  }>({
+    total_insights: '',
+    last_crawl: '',
+  });
 
   const initPage = async () => {
     const data = await execute({
       method: 'GET',
       url: '/home/get_stats',
     });
-    setData(data);
+    setPageData(data);
   };
   const getList = async () => {
     const data = await execute({
@@ -59,30 +67,66 @@ const Home = () => {
         </CardHeader>
 
         <CardContent>
-          <p>TODO:</p>
+          <div className="flex flex-col gap-3 text-sm text-muted-foreground">
+            <p>
+              Monitor crawled domains, track AI-generated insights, and keep
+              your web intelligence up to date.
+            </p>
+
+            <div className="flex gap-2">
+              {/* TODO: */}
+              <Button size="sm">Add New Domain</Button>
+              {/* TODO: */}
+              <Button size="sm" variant="outline">
+                View All Domains
+              </Button>
+            </div>
+          </div>
         </CardContent>
       </Card>
 
-      <div className="mt-4 lg:mt-6 grid grid-cols-12 gap-4 lg:gap-6">
-        <Card className="col-span-4">
-          <CardHeader>
-            <CardTitle>Domains</CardTitle>
-            <CardDescription> {data?.total || 0} </CardDescription>
-          </CardHeader>
+      <div className="mt-4 lg:mt-6 grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6">
+        {/* Domains */}
+        <Card>
+          <CardContent>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-muted-foreground">Domains</p>
+                <p className="text-xl font-bold">{data?.total || 0}</p>
+              </div>
+              <Globe className="h-8 w-8 text-muted-foreground" />
+            </div>
+          </CardContent>
         </Card>
 
-        <Card className="col-span-4">
-          <CardHeader>
-            <CardTitle>AI Insights</CardTitle>
-            <CardDescription> TODO: </CardDescription>
-          </CardHeader>
+        {/* AI Insights */}
+        <Card>
+          <CardContent>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-muted-foreground">AI Insights</p>
+                <p className="text-xl font-bold">
+                  {pageData?.total_insights || 0}
+                </p>
+              </div>
+              <Brain className="h-8 w-8 text-muted-foreground" />
+            </div>
+          </CardContent>
         </Card>
 
-        <Card className="col-span-4">
-          <CardHeader>
-            <CardTitle>Last Crawl</CardTitle>
-            <CardDescription> TODO: </CardDescription>
-          </CardHeader>
+        {/* Last Crawl */}
+        <Card>
+          <CardContent>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-muted-foreground">Last Crawl</p>
+                <p className="text-xl font-bold">
+                  {formatDateAndHour(pageData?.last_crawl) || '-'}
+                </p>
+              </div>
+              <Clock className="h-8 w-8 text-muted-foreground" />
+            </div>
+          </CardContent>
         </Card>
       </div>
 

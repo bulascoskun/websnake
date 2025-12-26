@@ -104,3 +104,11 @@ class CrawlRepository(BaseRepository):
         )
 
         return items, total
+
+    def get_last_crawl(self, job_ids: list[int]) -> CrawlJob:
+        return (
+            self.session.query(CrawlJob)
+            .filter(CrawlJob.id.in_(job_ids))
+            .order_by(CrawlJob.created_at.desc())
+            .first()
+        )

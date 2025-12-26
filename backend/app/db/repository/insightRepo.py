@@ -41,3 +41,13 @@ class InsightRepository(BaseRepository):
     def get_insight_by_id(self, insight_id: int):
         query = self.session.query(Insight).filter(Insight.id == insight_id).first()
         return query
+
+    def get_insight_count(
+        self,
+        user_id,
+    ):
+        query = self.session.query(Insight).filter(Insight.user_id == user_id)
+
+        total = query.with_entities(func.count()).scalar()
+
+        return total
