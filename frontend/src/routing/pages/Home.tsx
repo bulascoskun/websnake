@@ -19,8 +19,12 @@ import useApi from '@/hooks/useApi';
 import SkeletonTable from '@/components/ui/skeleton-table';
 import type { RecentDomains } from '@/types';
 import { formatDateAndHour } from '@/utils/helpers';
+import { Link, useNavigate } from 'react-router';
+import { AddDomain } from '@/components/AddDomain';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const Home = () => {
+  const navigate = useNavigate();
   const { loading: loading, error: _err, execute } = useApi();
 
   const [data, setData] = useState<RecentDomains | null>(null);
@@ -62,24 +66,25 @@ const Home = () => {
         <CardHeader>
           <CardTitle>Web Intelligence Dashboard</CardTitle>
           <CardDescription>
-            Crawled domains and AI-extracted insights
+            Monitor crawled domains, track AI-generated insights, and keep your
+            web intelligence up to date.
           </CardDescription>
         </CardHeader>
 
         <CardContent>
           <div className="flex flex-col gap-3 text-sm text-muted-foreground">
-            <p>
-              Monitor crawled domains, track AI-generated insights, and keep
-              your web intelligence up to date.
-            </p>
-
             <div className="flex gap-2">
-              {/* TODO: */}
-              <Button size="sm">Add New Domain</Button>
-              {/* TODO: */}
-              <Button size="sm" variant="outline">
-                View All Domains
-              </Button>
+              <AddDomain
+                buttonSize="sm"
+                getList={() => {
+                  navigate('/domains');
+                }}
+              />
+              <Link to="/domains">
+                <Button size="sm" variant="outline">
+                  View All Domains
+                </Button>
+              </Link>
             </div>
           </div>
         </CardContent>
@@ -90,11 +95,15 @@ const Home = () => {
         <Card>
           <CardContent>
             <div className="flex items-center justify-between">
-              <div>
+              <div className="w-full">
                 <p className="text-sm text-muted-foreground">Domains</p>
-                <p className="text-xl font-bold">{data?.total || 0}</p>
+                {loading ? (
+                  <Skeleton className="h-6 w-full" />
+                ) : (
+                  <p className="text-xl font-bold">{data?.total || 0}</p>
+                )}
               </div>
-              <Globe className="h-8 w-8 text-muted-foreground" />
+              <Globe className="h-8 w-8 text-muted-foreground ml-4" />
             </div>
           </CardContent>
         </Card>
@@ -103,13 +112,17 @@ const Home = () => {
         <Card>
           <CardContent>
             <div className="flex items-center justify-between">
-              <div>
+              <div className="w-full">
                 <p className="text-sm text-muted-foreground">AI Insights</p>
-                <p className="text-xl font-bold">
-                  {pageData?.total_insights || 0}
-                </p>
+                {loading ? (
+                  <Skeleton className="h-6 w-full" />
+                ) : (
+                  <p className="text-xl font-bold">
+                    {pageData?.total_insights || 0}
+                  </p>
+                )}
               </div>
-              <Brain className="h-8 w-8 text-muted-foreground" />
+              <Brain className="h-8 w-8 text-muted-foreground ml-4" />
             </div>
           </CardContent>
         </Card>
@@ -118,13 +131,17 @@ const Home = () => {
         <Card>
           <CardContent>
             <div className="flex items-center justify-between">
-              <div>
+              <div className="w-full">
                 <p className="text-sm text-muted-foreground">Last Crawl</p>
-                <p className="text-xl font-bold">
-                  {formatDateAndHour(pageData?.last_crawl) || '-'}
-                </p>
+                {loading ? (
+                  <Skeleton className="h-6 w-full" />
+                ) : (
+                  <p className="text-xl font-bold">
+                    {formatDateAndHour(pageData?.last_crawl) || '-'}
+                  </p>
+                )}
               </div>
-              <Clock className="h-8 w-8 text-muted-foreground" />
+              <Clock className="h-8 w-8 text-muted-foreground ml-4" />
             </div>
           </CardContent>
         </Card>

@@ -24,7 +24,21 @@ const formSchema = z.object({
     .max(256, 'URL must be at most 256 characters.'),
 });
 
-export function AddDomain({ getList }: { getList: () => void }) {
+export function AddDomain({
+  getList,
+  buttonSize = 'default',
+}: {
+  getList: () => void;
+  buttonSize?:
+    | 'default'
+    | 'sm'
+    | 'lg'
+    | 'icon'
+    | 'icon-sm'
+    | 'icon-lg'
+    | null
+    | undefined;
+}) {
   const [open, setOpen] = useState(false);
   const { loading: loading, execute } = useApi();
 
@@ -57,7 +71,9 @@ export function AddDomain({ getList }: { getList: () => void }) {
     <Dialog open={open}>
       <form id="form-url" onSubmit={form.handleSubmit(onSubmit)}>
         <DialogTrigger asChild>
-          <Button onClick={() => setOpen(true)}>Add Domain</Button>
+          <Button size={buttonSize} onClick={() => setOpen(true)}>
+            Add New Domain
+          </Button>
         </DialogTrigger>
 
         <DialogContent className="sm:max-w-106.25" showCloseButton={false}>
