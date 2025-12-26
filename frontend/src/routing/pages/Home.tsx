@@ -7,7 +7,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
 import { RefreshCcw, Globe, Brain, Clock } from 'lucide-react';
 import {
   Tooltip,
@@ -171,14 +170,16 @@ const Home = () => {
               </Tooltip>
             </div>
           </CardTitle>
+          <CardDescription>A list of your recent crawlings.</CardDescription>
+        </CardHeader>
 
-          <Separator />
+        <CardContent>
           {loading ? (
             <SkeletonTable />
           ) : (
-            <DomainsTable tableData={data?.data || []} />
+            <DomainsTable tableData={data?.data || []} nocaption />
           )}
-        </CardHeader>
+        </CardContent>
       </Card>
     </>
   );
