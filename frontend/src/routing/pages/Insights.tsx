@@ -1,4 +1,5 @@
 import AppPagination from '@/components/AppPagination';
+import CustomEmpty from '@/components/CustomEmpty';
 import InsightsTable from '@/components/InsightsTable';
 import {
   Card,
@@ -23,7 +24,7 @@ const Home = () => {
       <CardContent>
         {loading ? (
           <SkeletonTable count={10} />
-        ) : (
+        ) : data?.data?.length > 0 ? (
           <>
             <InsightsTable tableData={data?.data || []} nocaption />
             <AppPagination
@@ -32,6 +33,11 @@ const Home = () => {
               setPage={setPage}
             />
           </>
+        ) : (
+          <CustomEmpty
+            title="No insights were found"
+            description="You can add Insight and access it from here."
+          />
         )}
       </CardContent>
     </Card>

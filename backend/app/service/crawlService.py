@@ -79,7 +79,13 @@ class CrawlService:
         users_jobs = self.__crawlRepository.check_user_jobs(user_id=user_id)
 
         if not users_jobs:
-            raise HTTPException(status_code=400, detail="Pages not found")
+            return {
+                "data": [],
+                "page": 0,
+                "per_page": 0,
+                "total": 0,
+                "total_pages": 0,
+            }
 
         job_ids = [uj.job_id for uj in users_jobs]
 

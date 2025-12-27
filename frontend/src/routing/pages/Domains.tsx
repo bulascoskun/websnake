@@ -14,6 +14,7 @@ import { RefreshCcw } from 'lucide-react';
 
 import SkeletonTable from '@/components/ui/skeleton-table';
 import useGetTableData from '@/hooks/useGetTableData';
+import CustomEmpty from '@/components/CustomEmpty';
 
 const Domains = () => {
   const { data, loading, page, setPage, handleReset } = useGetTableData(
@@ -47,7 +48,7 @@ const Domains = () => {
       <CardContent>
         {loading ? (
           <SkeletonTable count={10} />
-        ) : (
+        ) : data?.data?.length > 0 ? (
           <>
             <DomainsTable tableData={data?.data || []} nocaption />
             <AppPagination
@@ -56,6 +57,11 @@ const Domains = () => {
               setPage={setPage}
             />
           </>
+        ) : (
+          <CustomEmpty
+            title="No domains were found"
+            description="You can add new domains from above."
+          />
         )}
       </CardContent>
     </Card>

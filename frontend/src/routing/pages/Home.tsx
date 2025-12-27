@@ -21,12 +21,19 @@ import { formatDateAndHour } from '@/utils/helpers';
 import { Link, useNavigate } from 'react-router';
 import { AddDomain } from '@/components/AddDomain';
 import { Skeleton } from '@/components/ui/skeleton';
+import CustomEmpty from '@/components/CustomEmpty';
 
 const Home = () => {
   const navigate = useNavigate();
   const { loading: loading, error: _err, execute } = useApi();
 
-  const [data, setData] = useState<RecentDomains | null>(null);
+  const [data, setData] = useState<RecentDomains>({
+    data: [],
+    page: 0,
+    per_page: 0,
+    total: 0,
+    total_pages: 0,
+  });
   const [pageData, setPageData] = useState<{
     total_insights: string;
     last_crawl: string;
@@ -99,7 +106,7 @@ const Home = () => {
                 {loading ? (
                   <Skeleton className="h-6 w-full" />
                 ) : (
-                  <p className="text-xl font-bold">{data?.total || 0}</p>
+                  <p className="text-xl font-bold">{data?.total || '-'}</p>
                 )}
               </div>
               <Globe className="h-8 w-8 text-muted-foreground ml-4" />
@@ -117,7 +124,7 @@ const Home = () => {
                   <Skeleton className="h-6 w-full" />
                 ) : (
                   <p className="text-xl font-bold">
-                    {pageData?.total_insights || 0}
+                    {pageData?.total_insights || '-'}
                   </p>
                 )}
               </div>
@@ -176,8 +183,13 @@ const Home = () => {
         <CardContent>
           {loading ? (
             <SkeletonTable />
-          ) : (
+          ) : data?.data?.length > 0 ? (
             <DomainsTable tableData={data?.data || []} nocaption />
+          ) : (
+            <CustomEmpty
+              title="No domains were found"
+              description="You can add new domains from above."
+            />
           )}
         </CardContent>
       </Card>
